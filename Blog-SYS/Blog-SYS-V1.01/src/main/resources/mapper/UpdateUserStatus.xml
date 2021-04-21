@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace对应哪个接口 -->
+<mapper namespace="com.sx.blog.admin.mapper.UpdateUserStatus">
+
+	<resultMap type="com.sx.blog.common.pojo.User" id="UserEntityMap">
+		<result column="username" property="username"/>
+		<result column="status" property="status"/>
+	</resultMap>
+	
+	<!-- 根据userid查询status登录状态 -->
+	<select id="selectUsername" resultType="java.lang.Integer">
+		select 
+					status 
+		from 
+					public.user 
+		where 
+					username=#{username}
+	</select>
+	
+	<!-- 更改用户状态 -->
+	<update id="updateUserStatus">
+		 update  
+		 					public.user 
+		 set 
+		  			status=#{status}
+		 where 
+		  			username=#{username}
+	</update>
+	
+	<!-- 更改用户状态 -->
+	<update id="updateUserStatusLogin">
+		 update  
+		 					public.user 
+		 set 
+		  			status=#{status}
+		 where 
+		  			username=#{username}
+	</update>
+	
+	
+</mapper>
+

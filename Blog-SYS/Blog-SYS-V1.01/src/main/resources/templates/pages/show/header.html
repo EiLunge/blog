@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>页面头部</title>
+<!-- 	<link rel="stylesheet" href="/layui/css/layui.css">
+		<script src="/layui/layui.js"></script> -->
+<!-- <script type="text/javascript" src="/layui/jquery-v3.2.1.js"></script> -->
+</head>
+<style type="text/css">
+.header_main {
+	display: block;
+	position: fixed;
+	top: 0;
+	min-width: 1200px;
+	z-index: 999999999;
+	width: 100%;
+	height: 60px;
+	text-align: center;
+	background-color: rgb(255, 255, 255);
+	color: #000000;
+	margin-bottom: 10px;
+}
+
+.search01 {
+	border-radius: 8px;
+}
+
+.search02 {
+	float: right;
+	margin-right: 130px;
+	margin-top: 20px;
+}
+
+.location00 {
+	float: left;
+	margin-left: 150px;
+}
+
+.location01 {
+	float: left;
+	margin-left: 50px;
+}
+
+.location03 {
+	float: right;
+	margin-right: 120px;
+}
+
+.location02 {
+	float: right;
+	margin-right: 20px;
+}
+
+.header_main .userinfo-header {
+	position: absolute;
+	top: 0px;
+	right: 60px;
+}
+</style>
+<body>
+	<div class="header" th:fragment="header">
+		<ul class="layui-nav header_main" lay-filter="">
+			<li class="layui-nav-item location00"><a
+				style="font-size: 30px; color: #000" href="">掘CSDN</a></li>
+			<li class="layui-nav-item layui-this location01"><a
+				style="color: #000" href="">首页</a></li>
+			<li class="layui-nav-item location01"><a id="follow_man"
+				style="color: #000">关注人</a></li>
+			<span class="layui-breadcrumb search02" lay-separator="|"> <span
+				th:if="${user?.username==null}"> <a href="/user/login">登录</a>
+					<a href="/user/regist">注册</a>
+			</span>
+			</span>
+			<li class="layui-nav-item location03" id="write_article"><a href="javascript:void(0);" style="color:black">写博客</a></li>
+			<li class="layui-nav-item location02"><input id="search_input"
+				style="height: 25px" class="search01" type="text" required
+				lay-verify="required" placeholder="请输入标题"></input>
+				<button id="search_article" type="button"
+					class="layui-btn layui-btn-xs">查询</button></li>
+			<li class="layui-nav-item userinfo-header" th:if="${user?.username}">
+				<a href=""><img
+					th:src="${user == null ? 
+                      '/images/login.jpg' :
+                       user.icon}"
+					class="layui-nav-img "><span style="color: black"><span
+						th:text="${user?.username}">用户名</span></span></a>
+				<dl class="layui-nav-child">
+					<dd>
+						<a href="/user/userinfo">个人主页</a>
+					</dd>
+					<dd>
+						<a href="/user/logout">退了</a>
+					</dd>
+				</dl>
+			</li>
+
+		</ul>
+	</div>
+	<script>
+		/* 导航 依赖 element 模块，否则无法进行功能性操作 */
+		layui.use('element', function() {
+			var element = layui.element;
+
+			//…
+		});
+	</script>
+
+	<!-- <script type="text/javascript">
+		
+		</script> -->
+</body>
+</html>
+
+
+

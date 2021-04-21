@@ -1,0 +1,235 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sx.blog.sys.mapper.UserMapper">
+	<select id="getUserByUsername" resultType="User"
+		parameterType="String">
+		SELECT * FROM public.user where username=#{username};
+	</select>
+	<select id="getUserByUserId" resultType="user"
+		parameterType="Integer">
+		SELECT * FROM public.user where user_id=#{userId};
+	</select>
+	<!-- 根据用户id列表查询用户列表信息 -->
+	<select id="getUserByUserIdList" resultType="User"
+		parameterType="List">
+		SELECT * FROM public.user
+		<where>
+			user_id in
+			<foreach collection="userIdList" open="(" close=")"
+				separator="," item="item">
+				#{item}
+			</foreach>
+		</where>
+	</select>
+	<select id="getStatusByEmail" resultType="Integer"
+		parameterType="String">
+		SELECT
+		"public"."user".status
+		FROM
+		"public"."user"
+		WHERE
+		"public"."user".e_mail = #{eMail}
+	</select>
+	<insert id="insertUserBaseInfo" parameterType="user">
+		INSERT INTO
+		public.user(username,password,e_mail,status,create_time,update_time)VALUES(
+		#{username},#{password},#{eMail},#{status},#{createTime},#{updateTime})
+	</insert>
+	<select id="getFollowUserByUserId" resultType="user"
+		parameterType="Integer">
+		SELECT
+		u.user_id,
+		u.username,
+		u.e_mail,
+		u.icon,
+		u.gender,
+		u.job,
+		u.introduce,
+		u.status,
+		f.user_id my_id
+		FROM
+		"public"."user" AS u
+		INNER JOIN "public".follow AS f ON u.user_id = f.follow_user
+		where
+		f.user_id=#{userId}
+	</select>
+	<select id="getFansUserByUserId" resultType="user"
+		parameterType="Integer">
+		SELECT
+		u.user_id follow_id,
+		u.username,
+		u.e_mail,
+		u.icon,
+		u.gender,
+		u.job,
+		u.introduce,
+		u.status,
+		f.user_id
+		FROM
+		"public"."user" AS u
+		INNER JOIN "public".fans AS f ON u.user_id = f.user_fans
+		where
+		f.user_id=#{userId}
+
+	</select>
+	<update id="updateStatusByUsername" parameterType="Hashmap">
+		UPDATE
+		public.user
+		SET
+		status=0,update_time=#{updateTime},icon='images/default.jpg' WHERE
+		username=#{username}
+	</update>
+	<update id="updateByUserSelf" parameterType="user">
+		UPDATE public.user
+		<set>
+			<if test="username!=null">
+				username =#{username},
+			</if>
+			gender=#{gender},
+			<if test="job != null and job != ''">
+				job = #{job},
+			</if>
+			<if test="introduce != null and introduce != ''">
+				introduce = #{introduce},
+			</if>
+			<if test="updateTime != null ">
+				update_time = #{updateTime},
+			</if>
+			<if test="icon != null and icon != ''">
+				icon = #{icon},
+			</if>
+		</set>
+		WHERE
+		user_id = #{userId};
+	</update>
+	<select id="countFollow" resultType="Integer"
+		parameterType="Integer"> SELECT COUNT(*) FROM "public".follow WHERE user_id =
+		#{userId}
+	</select>
+	<select id="countFans" resultType="Integer"
+		parameterType="Integer"> SELECT COUNT(*) FROM "public".fans WHERE user_id =
+		#{userId}
+	</select>
+	<select id="countDoLike" resultType="Integer"
+		parameterType="Integer"> SELECT
+		count(*)
+		FROM
+		"public"."like"
+		WHERE
+		user_id
+		= #{userId}
+	</select>
+	<select id="countHaveLike" resultType="Integer"
+		parameterType="Integer"> SELECT
+		count(*)
+		FROM
+		"public".article AS "a"
+		LEFT JOIN
+		"public"."like" AS l ON "a".article_id = l.article_id
+		WHERE
+		"a".user_id
+		= #{userId}
+	</select>
+	<select id="countCollect" resultType="Integer"
+		parameterType="Integer"> SELECT COUNT(*) FROM "public".collect WHERE user_id =
+		#{userId}
+	</select>
+	<select id="countArticle" resultType="Integer"
+		parameterType="Integer"> SELECT count(*) FROM "public".article WHERE status=1
+		and user_id=#{userId}
+	</select>
+	<select id="countArticleDraft" resultType="Integer"
+		parameterType="Integer"> SELECT COUNT(*) FROM "public".article WHERE status=0
+		and user_id = #{userId}
+	</select>
+	<select id="countCommnetNum" resultType="Integer"
+		parameterType="Integer">
+		SELECT COUNT(*) FROM "public".comment WHERE user_id =
+		#{userId}
+	</select>
+
+
+	<!-- 个人信息页文章查询 -->
+	<!-- 查询自己写的草稿 -->
+	<select id="getDraftByUserId" resultType="Article"
+		parameterType="integer">
+		SELECT * FROM article WHERE status=0 and
+		user_id=#{userId} ORDER BY create_time DESC limit 8 offset 0
+	</select>
+	<!-- 查询自己写的文章 -->
+	<select id="getArticleByUserId" resultType="Article"
+		parameterType="integer">
+		SELECT * FROM article WHERE status=1 and
+		user_id=#{userId} ORDER BY create_time DESC limit 8 offset 0
+	</select>
+	<!-- 查询喜欢文章id -->
+	<select id="getLikeArticleIDByUserId" resultType="integer"
+		parameterType="integer">
+		SELECT article_id FROM public.like WHERE
+		user_id=#{userId} and status=1
+	</select>
+	<!-- 根据文章id查询文章集合 -->
+	<select id="getLikeArticleByLikeList" resultType="Article"
+		parameterType="List">
+		SELECT * FROM public.article
+		<where>
+			article_id in
+			<!-- <foreach collection="likeList"  open="(" close=")" separator="," 
+				item="item">              #{item}          </foreach> 有毒第一排莫名其妙报错 -->
+			<foreach collection="likeList" open="(" close=")"
+				separator="," item="item">
+				#{item}
+			</foreach>
+		</where>
+		ORDER BY create_time DESC limit 8 offset 0
+	</select>
+	<!-- 根据用户id查归档 -->
+	<select id="getArchiverByUserId" resultType="archiver"
+		parameterType="integer">
+		SELECT
+		count(*)
+		,to_char( date_trunc('month',create_time), 'yyyy-mm') as year_month
+		FROM
+		"public".article
+		where
+		"public".article.user_id=#{userId} and status=1
+		GROUP BY
+		year_month
+	</select>
+	<!-- 根据用户id+日期查询文章列表 -->
+	<select id="getArticleByUserIdAndYearMonth" resultType="article" parameterType="Hashmap">
+		SELECT
+		*
+		FROM
+		"public".article
+		where status=1 and to_char( date_trunc('month',create_time), 'yyyy-mm')=#{yearMonth} and user_id=#{userId};
+	</select>
+	<select id="getCollectionArticleByUserId" resultType="article"
+		parameterType="integer">
+		SELECT
+		"a".article_id,
+		"a".user_id,
+		"a".tag_id,
+		"a".title,
+		"a".abstracts,
+		"a".pc_content,
+		"a".wx_content,
+		"a".likes,
+		"a".comment_num,
+		"a".create_time,
+		"a".update_time,
+		"a".images,
+		"a".status,
+		"a".browse,
+		"a".recommend,
+		"c".user_id
+		FROM
+		"public".article AS
+		"a"
+		LEFT JOIN "public"."collect" AS "c" ON "a".article_id =
+		"c".article_id
+		WHERE
+		"c".user_id = #{userId};
+	</select>
+
+</mapper>

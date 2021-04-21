@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>修改个人信息</title>
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" type="text/css"
+	href="/bootstrap3/css/bootstrap.css">
+<link rel="stylesheet" type="text/css"
+	href="/bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />
+<link rel="icon" href="/static/ico/favicon.ico">
+<!-- 自定义样式 -->
+<!-- <link rel="stylesheet" type="text/css" href="css/layout3.css" /> -->
+<link th:href="@{/css/layout3.css}" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+	var isUsername;
+	function checkUsername() {
+		if ($("#name").val() == null) {
+			$("#username-test").html('用户名不能为空');
+			return isUsername = false;
+		} else if ($("#name").val().length < 2 || $("#name").val().length > 15) {
+			$("#username-test").html('用户名长度在2-15');
+			return isUsername = false;
+		} else {
+			$("#username-test").html('');
+			return isUsername = true;
+		}
+	}
+</script>
+</head>
+<body>
+	<!--修改-->
+	<header>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+					<h1>
+						<small>欢迎使用</small> <b>掘CSDN</b> Blogs
+					</h1>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-8">
+				<!--登录面板-->
+				<div class="panel panel-primary">
+					<!--面板标题-->
+					<div class="panel-heading">
+						<h2 class="panel-title">edit</h2>
+					</div>
+					<!--面板主体-->
+					<div class="panel-body">
+						<!--登录表单-->
+						<form id="form-edit" class="form-horizontal" role="form">
+							<!--图片-->
+							<div class="form-group">
+								<label for="icon" class="col-md-2 control-label">图片</label>
+								<div class="col-md-8">
+									<div class="imgss" style="display: inline;">
+										<img class="imgs user-icon" name="icon" id="img-new"
+											style="width: 200px; height: 200px;"
+											th:src="${user == null ? 
+											'/images/login.jpg' :
+											 user.icon}"
+											src="/images/wugui.jpg">
+										<form method="post" id="form-edit-image"
+											enctype="multipart/form-data">
+											<input type="file" style="display: inline;" id="input-image"
+												name="face"> <input type="button" id="btn-image"
+												value="上传图片"> <input name="icon" id="new-icon"
+												th:value="${user?.icon}"></input>
+										</form>
+									</div>
+								</div>
+								<!--用户名-->
+								<div class="form-group">
+									<label for="username" class="col-md-2 control-label"> </label>
+									<div class="col-md-8"
+										style="width: 603px; margin-left: 55px; margin-bottom: -22px; display: flex; align-items: center;">
+										<label for="username" class="col-md-2 control-label"
+											style="display: flex; padding-bottom: 26px; margin-left: -3px;"><br /> 用户名</label> <input type="text"
+											th:value=${user?.username} style="margin-left: -5px;"
+											class="form-control" id="name" name="name"
+											placeholder="请输入用户名" Onblur="checkUsername()" /> <span
+											id="username-test"
+											style="color: red; font-size: 8px; margin: 5px"></span>
+									</div>
+								</div>
+								<!--性别-->
+								<div class="form-group">
+									<label for="gender" class="col-md-2 control-label">性别</label>
+									<div class="col-md-8">
+										<input type="radio" name="gender" value="1"
+											th:checked="${user.gender eq 1 }">Male<br> <input
+											type="radio" name="gender" value="0"
+											th:checked="${user.gender eq 0 }">Female
+									</div>
+								</div>
+								<!--职业-->
+								<div class="form-group">
+									<label for="job" class="col-md-2 control-label">职业</label>
+									<div class="col-md-8">
+										<input th:value="${user?.job}" type="text"
+											class="form-control" id="job" name="job" placeholder="请输入职业"></input>
+									</div>
+								</div>
+								<!--简介-->
+								<div class="form-group">
+									<label for="introduce" class="col-md-2 control-label">简介</label>
+									<div class="col-md-8">
+										<input th:value=${user?.introduce} type="text"
+											class="form-control" id="introduce" name="introduce"
+											placeholder="请输入简介">
+									</div>
+								</div>
+								<!--修改按钮-->
+								<div class="form-group">
+									<div class="col-md-offset-2 col-md-10">
+										<input type="button" id="btn-edit" value="修改"
+											class="btn btn-default sublogin">
+									</div>
+								</div>
+						</form>
+					</div>
+				</div>
+				<!--注册和不登录直接进入博客的链接-->
+				<div>
+					<span><a href="/user/regist">免费注册账号</a></span> <span
+						class="pull-right"><a href="/">进入博客</a></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--网页页脚-->
+	<footer>
+		<div class="container">
+			<div class="text-center">
+				Copyright © 2018 Tedu.cn All Rights Reserved <br />
+				京ICP备08000853号-56 <a target="_blank" href="http://www.tedu.cn/">达内时代科技集团有限公司</a>
+				版权所有
+			</div>
+		</div>
+	</footer>
+</body>
+<script type="text/javascript" src="/bootstrap3/jquery.min.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/holder.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/html5shiv.min.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/css3-mediaqueries.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/respond.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var iconSrc=$(".user-icon").attr('src');
+	$(".user-icon").attr('src',iconSrc+"?timeStamp=("+new Date()+')');
+});
+	$("#btn-edit").click(function() {
+		$.ajax({
+			"url" : "edit/doedit",
+			"data" : $("#form-edit").serialize(),
+			"type" : "POST",
+			"dataType" : "json",
+			"success" : function(result) {
+				if (result.status == 200) {
+					// 跳转路径
+					alert(result.msg);
+					window.location.href = '/'
+				} else if (result.status == 400) {
+					alert(result.msg);
+				}
+			}
+		});
+	});
+	$("#btn-image").click(function() {
+		// 构造formData
+		var formData = new FormData();
+		formData.append("face", $('#input-image')[0].files[0]);
+		$.ajax({
+			url : "/user/edit/image",
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false,//这个很有必要，不然不行
+			dataType : "json",
+			mimeType : "multipart/form-data",
+			"success" : function(result) {
+				if (result.status == 200) {
+					$("#img-new").attr('src', result.data.imgPath+"?timeStamp="+(+new Date()));
+					$("#new-icon").attr('value', result.data.imgPath);
+				} else if (result.status == 400) {
+					//alert(result.msg);
+				}
+			}
+		});
+	});
+</script>
+</script>
+</html>

@@ -1,0 +1,48 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+}
+
+group = 'com.sx'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+    mavenLocal()
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    mavenCentral()
+}
+
+dependencies {
+	compile 'org.springframework.boot:spring-boot-starter'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	compile('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+  compile 'org.springframework.boot:spring-boot-starter-web'
+  compile 'org.springframework.boot:spring-boot-starter-jdbc'
+
+  compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1'
+  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.9'
+  //runtimeOnly 'mysql:mysql-connector-java'
+  compile("org.springframework.boot:spring-boot-devtools")
+  //模板引擎
+  //compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.9.RELEASE'
+  compile("org.springframework.boot:spring-boot-starter-thymeleaf") 
+  compile 'org.springframework.boot:spring-boot-starter-mail'
+  //markdown编辑器解析工具
+  compile group: 'com.youbenzi', name: 'MDTool', version: '1.2.3'
+
+}
+
+test {
+	useJUnitPlatform()
+}

@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>垂直标签导航</title>
+		<!-- <link rel="stylesheet" href="/layui/css/layui.css">
+		<script src="/layui/layui.js"></script> -->
+	</head>
+	<style type="text/css">
+		.tag_main{
+			/* 设置绝对定位 position:fixed;  */		
+			background-color: pink;
+			color: #000000;
+			width: 96px;
+			text-align: center;
+		}
+		.recommend.active{
+		background-color:rgb(244, 68, 68) !important;
+		color:#fff !important;
+		}
+		.recommend:hover{
+		cursor:pointer;
+		}
+		.tag_list.active{
+		background-color:rgb(244, 68, 68) !important;
+		color:#fff !important;
+		}
+	</style>
+	<body>
+		<div class="tag_left" th:fragment="tag_left">
+		<ul class="layui-nav layui-nav-tree tag_main" lay-filter="test">
+		<!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+		  	<li class="layui-nav-item layui-nav-itemed">
+		    	<dl class="layui-nav-child">
+			      	<dd><a style="background-color:#fff; color:#000" class="layui-this recommend active">推荐</a></dd>
+			      	<div id="tag_search">
+			      		<dd th:each="tag : ${tag}"><a class="tag_list" th:text="${tag.tagName}" 
+			      		    th:attr="tagId=${tag.tagId}"href="javascript:;" style="background-color:#fff; color:#000">选项2</a>
+			      		</dd>
+			      	</div>
+		    	</dl>
+		  	</li>
+		</ul>
+	</body>
+	<script>
+	/* 注意：导航 依赖 element 模块，否则无法进行功能性操作 */
+	layui.use('element', function(){
+	  var element = layui.element;
+	  
+	  //…
+	});
+</script>
+</html>

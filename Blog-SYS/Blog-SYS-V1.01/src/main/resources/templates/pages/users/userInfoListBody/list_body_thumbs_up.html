@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>userinfo</title>
+<style>
+.list-body {
+	width: 70rem;
+	background-color: rgb(255, 255, 255);
+}
+
+.list-body .sub-header {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	padding: 0 2.4rem;
+	height: 5rem;
+	white-space: nowrap;
+/* 	border-left: 1px solid rgb(221, 221, 221);
+	border-right: 1px solid rgb(221, 221, 221); */
+	border-bottom: 0.1rem solid rgb(218, 219, 219);
+}
+
+.list-body .sub-header .sub-header-title {
+	margin-right: 1.2rem;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #000;
+}
+/* 添加 */
+.article-list .article .user-bar .interactive .click_heart i {
+	color: rgb(87, 162, 216);
+}
+.like-btn{
+    height: 100%;
+    width: 49px;
+    float: left;
+    margin: 2px -49px 0px 0px;
+    opacity: 0;
+}
+.like-btn:hover{
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+	<div class="list-body">
+		<div class="sub-header">
+			<div class="sub-header-title">点赞</div>
+		</div>
+		<div class="sub-item">
+			<ul class="article-list" th:each="article : ${myArticles}">
+				<li class="article">
+					<div class="entry">
+						<div class="content">
+							<h2>
+								<a th:href="@{'/user/article/detail/'+${article.articleId}}"
+									target="_blank" class="title"><span
+									class="recommend recommend-text"
+									th:if="${article.recommend}==1"> 荐 </span><span
+									th:text="${article?.title}">Qt实用技巧：使用OpenCV库操作摄像头拍照、调节参数</span></a>
+							</h2>
+							<div th:text="${article?.abstracts}" class="summary">
+								欢迎来到“Python进阶”专栏！来到这里的每一位同学，应该大致上学习了很多 Python
+								的基础知识，正在努力成长的过程中。在此期间，一定遇到了很多的困惑，对未来的学习方向感到迷茫。我非常理解你们所面临的处境。我从2007年开始接触
+								python 这门编程语言，从2009年开始单一使用 python
+								应对所有的开发工作，直至今天。回顾自己的学习过程，也曾经遇到过无数的困难，也曾经迷茫过、困惑过。开办这个专栏，正是为了帮助像我当年一样困惑的
+								Python 初学者走出困境、快速成长。希望我的经验能真正帮到你</div>
+							<dl class="user-bar">
+								<span th:each="author : ${Author}"> <span
+									th:if="${author.userId} == ${article.userId}"><dt>
+											<a th:href="'/user/other/'+${author.username}"  target="_blank" class="user_img"> <img
+												th:src="@{${author.icon}}" src="/images/bajie-1.jpg" class="user-icon"
+												alt="silentwolfyh" title="silentwolfyh"
+												username="silentwolfyh">
+											</a>
+										</dt>
+										<dd class="user_name" th:text="${author.username}">pig</dd></span>
+								</span>
+								<div class="interactive">
+									<span class="click_heart">
+									<a href="javascript:void(0);"  >
+											<span class="text" > <i
+												class="layui-icon layui-icon-praise" ></i>
+										</span> <span th:text="${article?.likes}" class="num">666</span>
+										<button class="like-btn" th:value="${article.articleId}"  onclick="removeLike(this.value)">1</button>
+									</a>
+									</span> <span class="read_num"> <a
+										th:href="@{'/user/article/detail/'+${article.articleId}}">
+											<span class="text"> <text class="iconfont icon-youlan"></text>
+										</span> <span th:text="${article?.browse}" class="num">666</span>
+									</a>
+									</span> <span class="comment_num"> <a
+										th:href="@{'/user/article/detail/'+${article.articleId}}">
+											<span class="text"> <text class="iconfont icon-huifu"></text>
+										</span> <span th:text="${article?.commentNum}" class="num">666</span>
+									</a>
+									</span>
+								</div>
+							</dl>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".user-icon").each(function() {
+	var iconSrc=$(this).attr('src');
+	if(iconSrc.indexOf("?") == -1){
+		$(this).attr("src",iconSrc+"?timeStamp=("+new Date()+')');
+		}
+	});
+});
+	  function removeLike(articleId){
+		 var userId = $("#userId").val();
+				if(!confirm("是否取消点赞？")){
+					return;
+				}
+		 $.ajax({
+				type : "GET",
+				url : "/user/power/likes",
+				data : {
+					likeId : -1,
+					articleId : articleId,
+					userId:userId
+				},
+				dataType : "JSON",
+				success : function(result) {
+					//页面显示点赞数量
+					if (result.status == 200) {			
+						/* window.location.reload(); */
+					    $('#list-body').load('/user/list-body-dz');
+						var likes=$('#userinfo-likesNum').text();
+						if(likes!=0){$('#userinfo-likesNum').text(--likes);}
+						
+					}
+				}
+			});
+			
+	 };
+</script>
+</html>

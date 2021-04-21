@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace对应哪个接口 -->
+<mapper namespace="com.sx.blog.admin.mapper.WordMapper">
+
+		
+	<!-- 根据点赞数量查询排名前三的文章 -->
+	<select id="selectAllTitle" resultType="com.sx.blog.admin.enetity.Word">
+		select
+					 title
+	  from 
+	 				public.article
+	 
+	</select>
+	
+	
+</mapper>
+

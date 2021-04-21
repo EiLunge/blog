@@ -1,0 +1,98 @@
+<div   class="comment-re"style="margin-top: 8px;">
+<input type="hidden" th:value="${moreLikeCommmentIdList}" class="moreLikeCommmentIdList">
+	<div th:each="commentVo,stat:${replyComment}" class="comment_reply">
+	<div th:classappend="SComment+${commentVo?.comment?.commentId}">
+		<input type="hidden" th:classappend="username+${commentVo?.comment?.commentId}" th:value="${commentVo?.username}">
+		<div
+			style="border-left: 4px solid rgb(197, 197, 197); margin-left: 38px; padding-bottom: 5px;">
+			<div class="area_comment_message">
+				<div class="layui-col-md1 image_icon" style="margin-right: -32px;">
+					<image th:src="@{${commentVo?.userIcon}}" style="margin-left: -10px;"
+						class="comment-user-icon user-icon" src="/images/bajie-1.jpg" />
+				</div>
+				<a th:text="${commentVo?.username}" class="names01 user-name"
+					target="_blank" href="javascript:void(0);">月光寒 </a> <span
+					class="huifu">回复</span> <span th:text="${commentVo?.parentName}"
+					class="comment_reply_date"
+					style="color: #2e2e2e; padding-top: 2px; font-size: 14px;">大帅比</span>
+				<span th:text="${commentVo?.comment?.createTime}"
+					class="comment_reply_name">2020-01-10 12:33:25</span>
+
+
+
+
+
+				<div class="comment_look_support re" style="margin-right: 44px; width: 55px;"th:value="${commentVo?.comment?.commentId}" onclick="doSCommentSupport($(this).attr('value'))">
+					<text class="iconfont icon-zan"
+						style="font-size: 18px; "></text>
+					<span th:text="${commentVo?.comment?.likes}!=0?${commentVo?.comment?.likes}:''"class="commentLikesR"></span>
+				</div>
+
+
+
+
+				<div id="comment-opt-bar2" style="display: none; margin-right: 100px;" class="comment-opt-bar2 reply">
+					<a th:value="${commentVo?.comment?.commentId}"
+						onclick="showCommentUser($(this).attr('value'))"
+						class="comment_look_select" href="javascript:void(0);">回复</a> <a
+						th:if="${commentVo?.comment?.userId} == ${userId}"
+						th:value="${commentVo?.comment?.commentId}"
+						onclick="delectSComment($(this).attr('value'))"
+						class="comment_look_select" href="javascript:void(0);">删除</a>
+				</div>
+			</div>
+			<div th:text="${commentVo?.comment?.commentText}"
+				class="comment_reply_text"
+				style="padding-top: 3px; font-size: 14spx; margin-left: 48px;">这里是对评论的回复的内容:亦余心之所善兮，虽九死其犹未悔。</div>
+		</div>
+	</div>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(
+				function() {
+					$(".comment_reply").hover(
+							function() {
+								$(this).find('.comment-opt-bar2.reply').css(
+										'display', 'block');
+							},
+							function() {
+								$(this).find('.comment-opt-bar2.reply').css(
+										'display', 'none');
+							})
+							var l=$(".moreLikeCommmentIdList").val().slice(1,-1);
+					arr=l.split(",");
+					for(let i=0;i<arr.length;i++){
+						$(".SComment"+arr[i].trim()).find(".comment_look_support.re").css("color","rgb(202, 12, 22)");
+					}
+					if($(".comment-re").find(".comment_reply").length==0){
+						$(".comment-re").remove();
+					}
+				}
+				)
+				//点赞操作(注：下面class完全不一样)
+		function doSCommentSupport(commentId){
+			var userId=$('#userId').val();
+			$.ajax({
+				type : "GET",
+				url : "/user/power/do-comment-like",
+				data : {
+					commentId : commentId,
+					userId : userId,
+				},
+				dataType : "JSON",
+				success : function(result) {
+					if(result.data==1){
+						$(".SComment"+commentId).find(".comment_look_support.re").css("color","rgb(202, 12, 22)");
+						var likesNum=$(".SComment"+commentId).find(".commentLikesR").text();
+						//likesNum = parseInt(likesNum) + 1;
+						$(".SComment"+commentId).find(".commentLikesR").text(++likesNum);
+					}else if(result.data==0){
+					$(".SComment"+commentId).find(".comment_look_support.re").css("color","#4d4d4d");
+					var likesNum=$(".SComment"+commentId).find(".commentLikesR").text();
+					var likeNum2=--likesNum==0?"":likesNum;
+					$(".SComment"+commentId).find(".commentLikesR").text(likeNum2);}
+				}
+			});
+		}
+	</script>
+</div>

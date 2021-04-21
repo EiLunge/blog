@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>userinfo</title>
+    <style>
+        .sub-item .user-list {
+            display: block;
+            list-style-type: disc;
+            border-left: 1px solid rgb(221, 221, 221);
+            border-right: 1px solid rgb(221, 221, 221);
+        }
+
+        .sub-item .user-list .item  {
+            border-bottom: 1px solid rgb(221, 221, 221);
+        }
+
+        .sub-item .user-list .item .user .link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 3.8rem;
+            min-height: 6.6rem;
+        }
+
+        .sub-item .user-list .item .user .link .user-icon-img {
+            flex: 0 0 auto;
+            margin-right: 1.7rem;
+            width: 6rem;
+            height: 6rem;
+            border-radius: 50%;
+            /* display: inline-block; */
+            /* position: relative;
+            background-position: 50%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-color: #eee; */
+
+        }
+
+        .sub-item .user-list .item .user .link .info-box {
+            flex: 1 1 auto;
+            min-width: 0;
+            height: 5.2rem;
+        }
+
+        .sub-item .user-list .item .user .link .info-box .user-name {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #2e3135;
+        }
+
+        .sub-item .user-list .item .user .link .info-box .user-job {
+            padding-top: 0.6rem;
+            font-size: 1.4rem;
+            color: rgb(168, 168, 168);
+        }
+
+        .sub-item .user-list .item .user .link .info-box .job {
+            margin-top: 0.96rem;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #b9c0c8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sub-item .user-list .item .user .follow-btn {
+            background-color: rgb(167, 207, 116);
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="list-body">
+        <div class="sub-header">
+            <div class="sub-header-title">关注人</div>
+        </div>
+        <div class="sub-item">
+            <!-- 关注人列表 -->
+            <ul class="user-list" th:each="follow : ${follows}">
+                <li class="item">
+                    <div class="user">
+                        <div class="link">
+                            <div class="avatar user-icon">
+                                <a th:href="'/user/other/'+${follow.username}" target="_blank"><image class="user-icon-img" th:src="${follow?.icon}" src="/images/bajie-1.jpg" /></a>
+                            </div>
+                            <div class="info-box">
+                                <a th:href="'/user/other/'+${follow.username}" target="_blank" class="user-name"><span th:text="${follow?.username}">高富帅</span></a>
+                                <a th:href="'/user/other/'+${follow.username}" target="_blank"><div class="user-job"><span th:text="${follow?.introduce}">我是高富帅</span></div></a>
+                            </div>
+                            <button class="layui-btn follow-btn" th:value="${follow?.userId}" onclick="removeFollow(this.value)">已关注</button>
+                        </div>
+                         
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+//关注改不了了，太乱了，得重写
+function removeFollow(userId) {
+	 var uid = $("#userId").val();
+	var isFollowId=1;
+	if (isFollowId > 0) {
+		if(!confirm("是否取消关注？")){
+			return;
+		}
+	}
+	$.ajax({
+		type : "GET",
+		url : "/user/power/follow",
+		data : {
+			uid : uid,
+			isFollowId : isFollowId,
+			otherId : userId
+		},
+		dataType : "JSON",
+		success : function(result) {
+			if (result.status == 200) {
+				$('#list-body').load('/user/list-body-gz');
+				var followNum=$('#userinfo-followNum').text();
+				if(followNum!=0){$('#userinfo-followNum').text(--followNum)};
+			}
+		}
+	});
+};
+</script>
+
+</html>

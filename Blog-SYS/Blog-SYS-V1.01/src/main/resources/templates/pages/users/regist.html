@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>注册</title>
+<meta name="viewport"
+  content="width=device-width,initial-scale=1,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" type="text/css"
+  href="/bootstrap3/css/bootstrap.css">
+<link rel="stylesheet" type="text/css"
+  href="/bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />
+<!-- 自定义样式 -->
+<link rel="stylesheet" type="text/css" href="/css/layout3.css" />
+<link rel="icon" href="/static/ico/favicon.ico">
+<style type="text/css">
+	#this{
+		margin-left: 120px;
+	}
+</style>
+<script type="text/javascript">  
+var isEmail;
+var isUsername;
+var isPassword;
+var isRePassword;
+      function checkEmail() {
+	{
+			var temp = document.getElementById("email");
+			//对电子邮件的验证
+			var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+			if (!myreg.test(temp.value)) {
+				$("#email-test").html('邮箱格式错误')
+				//alert('提示\n\n请输入有效的E_mail！');
+				return isEmail=false;
+			}else{
+	    		  $.ajax({
+	    			    "url" : "regist/check",
+	    			    "data" : {"email":$("#email").val()},
+	    			    "type" : "POST",
+	    			    "dataType" : "json",
+	    			    "success" : function(result) {
+	    			      if (result.status == 200) {
+	    		    		  $("#email-test").html('');
+	    		    		  return isEmail=true;
+	    			      }else {
+	    			    	$("#email-test").html('邮箱已被激活');
+	  		    		  return isEmail=false;
+	    			      }
+	    			    }
+	    			  });
+			}
+		}
+	}
+      function checkUsername(){
+    	  if($("#name").val()==null){
+    		  $("#username-test").html('用户名不能为空');
+    		  return isUsername=false;
+    	  }else if($("#name").val().length<2||$("#name").val().length>15){
+    		  $("#username-test").html('用户名长度在2-15');
+    		  return isUsername=false;
+    	  }else{
+    		  $.ajax({
+  			    "url" : "regist/check",
+  			    "data" : {"username":$("#name").val()},
+  			    "type" : "POST",
+  			    "dataType" : "json",
+  			    "success" : function(result) {
+  			      if (result.status == 200) {
+  		    		  $("#username-test").html('');
+  		    		  return isUsername=true;
+  			      }else {
+  			    	$("#username-test").html('用户名已存在');
+		    		  return isUsername=false;
+  			      }
+  			    }
+  			  });
+
+    	  }
+      }
+      function checkPassword(){
+    	  if($("#pwd").val().length==0){
+    		  $("#password-test").html('密码不能为空');
+    		  return isPassword=false;
+    	  }else{
+    		  $("#password-test").html('');
+    		  return isPassword=true;
+    	  }
+      }
+      function checkRePassword(){
+    	  if($("#pwd").val()!=$("#repwd").val()){
+    		  $("#rePassword-test").html('两次密码输入不一致');
+    		  return isRePassword=false;
+    	  }else{
+    		  $("#rePassword-test").html('');
+    		  return isRePassword=true;
+    	  }
+      }
+</script>
+</head>
+
+<body>
+  <!--注册页标题-->
+  <header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+          <h1>
+            <small>欢迎使用</small> <b>掘CSDN</b> Blogs
+          </h1>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-offset-2 col-md-8">
+        <!--注册面板-->
+        <div class="panel panel-primary">
+          <!--面板标题-->
+          <div class="panel-heading">
+            <h3 class="panel-title">新用户注册</h3>
+          </div>
+          <!--面板主体-->
+          <div class="panel-body">
+            <!--注册表单-->
+            <form id="form-reg" class="form-horizontal" role="form">
+              <!--用户名-->
+              <div class="form-group">
+                <label for="name" class="col-md-2 control-label">用户名</label>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" id="name"
+                    name="name" placeholder="请输入用户名" Onblur="checkUsername()"/>
+                    <span id="username-test" style="color:red;font-size:8px;margin:5px"></span>
+                </div>
+              </div>
+              
+              <!--电子邮箱-->
+              <div class="form-group">
+                <label for="email" class="col-md-2 control-label">电子邮箱</label>
+                <div class="col-md-8">
+                <input type="email" class="form-control" id="email" name="email" placeholder="请输入电子邮箱"  Onblur="checkEmail()" />
+                <span id="email-test" style="color:red;font-size:8px;margin:5px" ></span>
+                </div>  
+              </div>    				
+              <!--密码-->
+              <div class="form-group">
+                <label for="pwd" class="col-md-2 control-label">登录密码</label>
+                <div class="col-md-8">
+                  <input type="password" class="form-control" id="pwd"
+                    name="pwd" placeholder="请输入密码" Onblur="checkPassword()">
+                    <span id="password-test" style="color:red;font-size:8px;margin:5px" ></span>
+                </div>
+              </div>
+              
+              <!--确认密码-->
+              <div class="form-group">
+                <label for="repwd" class="col-md-2 control-label">确认密码</label>
+                <div class="col-md-8">
+                  <input type="password" class="form-control" id="repwd"
+                    name="repwd" placeholder="请输入再次密码" Onblur="checkRePassword()">
+                    <span id="rePassword-test" style="color:red;font-size:8px;margin:5px" ></span>
+                </div>
+              </div>
+              
+              <!--注册按钮-->
+              <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                  <input  value="注册" id="btn-regist"
+                  type="button"
+                    class="btn btn-default subreg">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!--返回链接-->
+        <div>
+          <span><a href="login.html">返回</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--网页页脚-->
+  <footer>
+    <div class="container">
+      <div class="text-center">
+        Copyright © 2018 Tedu.cn All Rights Reserved <br />
+        京ICP备08000853号-56 <a target="_blank" href="http://www.tedu.cn/">杭州上行集团有限公司旗下掘CSDN项目组</a>
+        版权所有
+      </div>
+    </div>
+  </footer>
+</body>
+<script type="text/javascript" src="/bootstrap3/jquery.min.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/bootstrap.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/holder.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/html5shiv.min.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/css3-mediaqueries.js"></script>
+<script type="text/javascript" src="/bootstrap3/js/respond.min.js"></script>
+<script type="text/javascript">
+var count=0;
+$("#btn-regist").click(function() {
+	count++;
+	if(isEmail&&isUsername&&isPassword&&isRePassword&&count==1){
+		  $.ajax({
+			    "url" : "/user/regist/doregist",
+			    "data" : $("#form-reg").serialize(),
+			    "type" : "POST",
+			    "dataType" : "json",
+			    "success" : function(result) {
+			      if (result.status == 200) {
+			        // 跳转路径
+			        alert(result.msg);
+			         window.location.href = '/user/activate'
+			      }else if(result.status == 400){
+			        alert(result.msg);
+			      }
+			    }
+			  });
+	}
+});
+</script>
+
+</html>

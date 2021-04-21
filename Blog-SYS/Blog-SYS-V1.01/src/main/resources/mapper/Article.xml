@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sx.blog.sys.mapper.ArticleMapper">
+
+    <!-- 查询文章 -->
+	<select id="selectArticle" resultType="com.sx.blog.common.pojo.Article">
+		select * from public.article where article_id=#{articleId} 
+	</select>
+	
+	<!-- 增添文章 -->
+	<insert id="addArticle">
+		insert into public.article (user_id,tag_id,title,abstracts,pc_content,wx_content,
+		likes,comment_num,create_time,update_time,images,status,browse,recommend) values
+		(#{userId},#{tagId},#{title},#{abstracts},#{pcContent},null,0,0,#{createTime},#{updateTime},
+		null,#{status},0,0)
+	</insert>
+	
+	<!-- 修改文章 -->
+	<update id="updateArticle">
+	update public.article set abstracts=#{abstracts},pc_content=#{pcContent},tag_id=#{tagId},title=#{title},
+	update_time=#{updateTime},status=#{status},images=#{images}
+	where article_id=#{articleId}
+	</update>
+</mapper>
+	

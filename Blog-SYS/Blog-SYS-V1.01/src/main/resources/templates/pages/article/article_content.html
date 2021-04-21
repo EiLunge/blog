@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文章内容</title>
+<link rel="stylesheet" href="/editor/css/editormd.css">
+<script src="/editor/js/jquery.min.js"></script>
+<script src="/editor/lib/marked.min.js"></script>
+<script src="/editor/lib/prettify.min.js"></script>
+<script src="/editor/lib/raphael.min.js"></script>
+<script src="/editor/lib/underscore.min.js"></script>
+<script src="/editor/lib/sequence-diagram.min.js"></script>
+<script src="/editor/lib/flowchart.min.js"></script>
+<script src="/editor/lib/jquery.flowchart.min.js"></script>
+<script src="/editor/js/editormd.js"></script>
+</head>
+<style type="text/css">
+.article-content {
+	width: 100%;
+	height: 100%;
+	background-color: rgb(244, 245, 245);
+}
+
+.pc-content {
+	width: 100% -16px;
+	margin: 0 auto;
+	background-color: #fff;
+	position: relative;
+	padding: 16px 0 16px 16px;
+}
+.pc-content .article-item {
+	min-height: 300px;
+}
+
+.header-box {
+	border-bottom: 1px solid #f5f6f7;
+	padding-left: 10px;
+	z-index: 9;
+	background-color: #fff;
+}
+
+.title-article {
+	font-size: 28px;
+	word-wrap: break-word;
+	color: #000;
+	margin-bottom: 10px;
+}
+
+.more-message {
+	font-size: 14px;
+	color: #858585;
+}
+
+.author-name {
+	margin: 0 14px 10px 0px;
+}
+
+.create-time {
+	margin-right: 15px;
+}
+
+.collect:hover {
+	cursor: pointer;
+}
+
+.browse {
+	margin-right: 15px;
+}
+
+.md-content {
+	margin-bottom: 50px;
+	margin-left: 10px;
+}
+
+.bottom-message {
+	font-size: 14px;
+	margin-bottom: 15px;
+}
+
+.bottom-message .like:hover {
+	cursor: pointer;
+}
+
+.bottom-message .report:hover {
+	cursor: pointer;
+}
+
+.bg-color {
+	background-color: #f5f6f7;
+	padding: 6px 8px;
+}
+
+.kongge {
+	margin-right: 3px;
+}
+/* 头像 */
+.item {
+	border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.item .user .link {
+	display: flex;
+	align-items: center;
+	padding: 0.8rem 3.8rem;
+	min-height: 6.6rem;
+}
+
+.item .user .link .user-icon-img {
+	flex: 0 0 auto;
+	margin-right: 1.7rem;
+	width: 6rem;
+	height: 6rem;
+	border-radius: 50%;
+	/* display: inline-block; */
+	/* position: relative;
+            background-position: 50%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-color: #eee; */
+}
+
+.item .user .link .info-box {
+	flex: 1 1 auto;
+	min-width: 0;
+	height: 5.2rem;
+}
+
+.item .user .link .info-box .user-name {
+	font-size: 2rem;
+	font-weight: 600;
+	color: #2e3135;
+}
+
+.item .user .link .info-box .user-job {
+	padding-top: 0.6rem;
+	font-size: 1.4rem;
+	color: rgb(168, 168, 168);
+}
+
+.item .user .link .info-box .job {
+	margin-top: 0.96rem;
+	font-size: 1.6rem;
+	font-weight: 500;
+	color: #b9c0c8;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.item .user .follow-btn {
+	background-color: rgb(167, 207, 116);
+	margin-right: 10px;
+}
+
+/* 举报模态框 */
+.box-content-top span {
+	font-size: 14px;
+	font-family: PingFangSC-Semibold, PingFang SC;
+	font-weight: 600;
+	color: #3d3d3d;
+	cursor: default;
+}
+
+.box-input {
+	width: 458px;
+	height: 112px;
+	background: #fff;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	text-align: center;
+}
+
+.box-input textarea {
+	outline: none;
+	margin-top: 8px;
+	border: 0;
+	border-radius: 2px;
+	line-height: 22px;
+	height: 48px;
+	width: 450px;
+	resize: none;
+	border-color: #ccc;
+	font-size: 14px;
+	color: #4d4d4d;
+}
+
+.ipt.ipt-textarea {
+	padding: 8px;
+	height: auto;
+	font-size: 14px;
+	color: #4d4d4d;
+	line-height: 22px;
+}
+
+.ipt {
+	padding: 0 8px;
+	height: 32px;
+	width: 200px;
+	line-height: 32px;
+	background: #fff;
+	border: 1px solid #c1c1c1;
+	border-radius: 4px;
+	-webkit-transition: border-color .1s ease-in-out;
+	transition: border-color .1s ease-in-out;
+}
+
+.modal-content {
+	padding-left: 20px;
+}
+/* 底部确定按钮 */
+.pos-footer {
+	margin-top: 19px;
+	margin-bottom: 16px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: end;
+	-ms-flex-pack: end;
+	justify-content: flex-end;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	padding: 0 12px;
+}
+
+/* 模态框标题加粗 */
+.layui-layer-title {
+	font-weight: 600;
+	color: red;
+}
+
+.layui-layer-btn.layui-layer-btn- {
+	background-color: #fff;
+}
+
+.layui-layer-content {
+	height: 160px !important;
+}
+/*修改按钮样式*/
+.layui-layer-btn0 {
+	background-color: #fff !important;
+	color: black !important;
+	margin: 5px 0px 0px !important;
+	border: 0px solid #dedede !important;
+}
+
+.layui-layer-btn1 {
+	color: #ca0c16 !important;
+	margin: 5px 0px 0px !important;
+	border: 0px solid #dedede !important;
+}
+
+<!--
+评论css -->.comment {
+	padding: 20px;
+}
+
+.comment-user-icon {
+	margin-left: 18px;
+	margin-top: 0px;
+	width: 27px;
+	height: 27px;
+	border-radius: 50%;
+}
+
+.comment .comment-input {
+	width: 641px;
+	height: 100px;
+}
+
+.pinglun01 {
+	float: right;
+	margin: 5px 43px 0px 0;
+}
+
+.pinglun02 {
+	float: right;
+	margin: 5px 15px 0 0;
+}
+
+.area_comment {
+	margin-top: 8px;
+}
+
+.area_comment_publish {
+	border-bottom: 1px dashed #e0e0e0;
+	padding-right: 15px;
+	font-size: 14px;
+}
+
+.area_comment_look {
+	width: 100%;
+	font-size: 14px;
+	padding: 8px 0 8px 0;
+	border-bottom: 1px dashed #e0e0e0;
+}
+
+.names01 {
+	float: left;
+	font-size: 17px;
+	font-weight: bold;
+	color: #2e2e2e;
+	margin-top: 6px;
+	margin-left: -3px;
+}
+
+.image_icon {
+	margin-left: 20px;
+	margin-top: 2px;
+}
+
+.comment_look_time {
+	float: left;
+	margin: 7px 0 0 8px;
+	color: #999999;
+}
+
+.comment_look_text {
+	color: #4d4d4d;
+	margin-left: 85px;
+	margin-right: 35px;
+}
+
+.comment_look_support {
+	float: right;
+	margin: 4px 0px 0px -12px;
+}
+
+.comment_look_delete {
+	float: right;
+	margin: 6px 9px 0 8px;
+	font-size: 12px;
+	line-height: 20px;
+	color: #79a5e5;
+	border-radius: 4px;
+}
+
+.comment_look_select {
+	float: right;
+	margin: 6px 15px 0 8px;
+	font-size: 12px;
+	line-height: 20px;
+	color: #79a5e5;
+	border-radius: 4px;
+}
+
+.area_comment_message {
+	width: 100%;
+	height: 30px;
+}
+
+.comment_reply {
+	width: 100%;
+	margin-left: 47px;
+}
+
+.comment_reply_date {
+	float: left;
+	margin: 4px 0 0 8px;
+	font-size: 14px;
+	color: #999999;
+}
+
+.comment_reply_name {
+	float: left;
+	margin: 6px 0 0 8px;
+	font-size: 14px;
+	color: #999999;
+}
+
+.huifu {
+	float: left;
+	margin: 4px 0 0 8px;
+	font-size: 14px;
+	color: #999999;
+}
+
+.comment_reply_text {
+	color: #4d4d4d;
+	width: 79%;
+	margin-left: 85px;
+}
+
+.md-content img {
+	max-width: calc(100% - 26px);
+	display: block;
+	padding-top: 10px;
+}
+.comment_look_support:hover{
+cursor:pointer;
+}
+/* 11111111111111111111111111111111111commnet的新样式加这下面11111111111111111111111111111111111111 */
+</style>
+<body class="article-content">
+<input type="hidden"  id="commentId"></input>
+	<div style='display: none' class="modal-content" id="modalContent">
+		<div class="pos-content">
+			<div class="box-content-top" style="height: 45px;">
+				<span class="box-content-span"
+					style="position: absolute; left: 20px; top: 9px; font-size: 20px;">举报原因（必填）</span>
+			</div>
+			<div class="box-content-bottom">
+				<div class="box-input">
+					<textarea class="ipt ipt-textarea" style="padding: 0;"
+						id="box-input-text" name="description" placeholder="请详细描述您的举报内容"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pc-content">
+		<div class="article-item">
+			<div class="header-box">
+				<h1 th:text="${article?.title}" class="title-article">标题内容,长一点有没有什么影响！</h1>
+				<div class="more-message" style="margin-bottom: 10px">
+					<span class="author-name" th:text="'作者名：'+${username}">作者名：月光寒</span>
+					<span th:text="'发布于  '+${article.createTime}" class="create-time">发布于
+						2020-01-10 12:33:25</span> <span th:text="'游览量  '+${article.browse}"
+						class="browse">游览量 125</span> <span
+						class="layui-icon layui-icon-rate collect"
+						style="color: #ff700a; font-size: 14px;" onclick="doCollect()"><span
+						class="isCollect">收藏</span></span>
+				</div>
+			</div>
+			<!-- markdown文本内容 -->
+			<div class="md-content">
+				<div id="md-content" style="padding: 0px;">
+					<textarea style="display: none;" placeholder="markdown语言"
+						th:utext="${article?.pcContent}">#Editor.md</textarea>
+				</div>
+			</div>
+			<!-- th:utext="${article?.pcContent}" -->
+		</div>
+
+
+		<div class="bottom-message">
+			<span class="layui-icon layui-icon-praise bg-color like"
+				style="font-size: 14px" onclick="doLike()">点赞 <span
+				th:text="${article?.likes}" id="likes">1</span></span> <span
+				class="layui-icon layui-icon-rate bg-color kongge collect"
+				style="font-size: 14px" onclick="doCollect()"> <span
+				class="isCollect">收藏</span>
+			</span> <span class="layui-icon layui-icon-tips bg-color report"
+				style="font-size: 14px" onclick="openReportModal()"> 举报</span>
+
+		</div>
+	</div>
+
+	<!-- 用户头像 -->
+	<div class="item" style="background-color: #fff;">
+		<div class="user">
+			<a herf="javascript:void(0);" target="_blank" class="link">
+				<div class="avatar user-icon">
+					<image class="user-icon-img user-icon"
+						th:src="@{${other.user.icon}}" src="/images/bajie-1.jpg" />
+				</div>
+				<div class="info-box">
+					<object>
+						<a th:text="${other.user.username}"
+							th:href="'/user/other/'+${other.user.username}" target="_blank"
+							class="user-name">高富帅</a>
+					</object>
+					<div th:text="'我是 '+${other.user.username}" class="user-job">我是高富帅</div>
+				</div>
+				<button class="layui-btn follow-btn userinfo-btn follow-btn"
+					th:value="${other?.user?.userId}" onclick="addFollow(this.value)">关注</button>
+			</a>
+		</div>
+	</div>
+	<!-- 评论 -->
+	<div class="area_comment">
+		<!-- 用户对文章的评论区 -->
+		<div class="area_comment_publish"
+			style="overflow: hidden; background-color: #fff; padding: 13px 0px;">
+			<div id="dp01" class="comment">
+				<div class="layui-col-md1" style="padding-left: 21px;">
+					<image
+						th:src="${user == null ? 
+                      '/images/login.jpg' :
+                       user.icon}"
+						src="/images/bajie-1.jpg" class="comment-user-icon user-icon" />
+				</div>
+				<div class="layui-col-md11 " >
+				<div id="commentArticleA" style=" width: 656px; ">
+				<textarea
+						style="height: 75px; padding: 7px 8px; border-radius: 4px; resize: none; margin-left: 20px;"
+						name="commentContent" id="commentArticle" placeholder="想对作者说点什么"
+						class="comment-input" rows="3"></textarea>
+				</div>
+					
+				</div>
+			</div>
+			
+			<div id="comment-opt-bar" style="display:none;">
+
+				<button
+					class="layui-btn layui-btn-sm layui-btn-danger pinglun01 sub-comment-btn"
+					style="border: 1px solid rgb(202, 12, 22); display: none; background-color: rgb(202, 12, 22); margin-right: 43px; margin-left: 6px; padding: 0 8px; font-size: 14px; border-radius: 4px;"onclick="submitComment()">发表评论</button>
+				<button class="layui-btn layui-btn-sm layui-btn-danger pinglun02 cancle-comment-btn"
+					style="margin-left: 3px ! important; display: none; background-color: white; color: black; border: 1px solid rgb(204, 204, 204); padding: 0px 8px; font-size: 14px; border-radius: 4px;"
+					>取消回复</button>
+				<span class="sub-comment-btn"
+					style="float: right; font-size: 12px; color: #999; line-height: 20px; margin-top: 11px; display: none;">最多输入150个字符</span>
+				
+			</div>
+		</div>
+		<div class="new_comment"></div>
+		
+		<div class="commentList_body">
+		<div class="area_comment_look" th:replace="/article/comment_list"></div></div>
+		
+	</div>
+	<script type='text/javascript'>
+	//点击其他地方隐藏评论按钮
+ 	$(document).on('click',function(e){
+	        var e = e || window.event; //浏览器兼容性
+	        var elem = e.target || e.srcElement;
+	        while (elem) { //循环判断至跟节点，防止点击的是div子元素
+	            if (elem.id && elem.id=='comment-opt-bar') {
+	                return;
+	            }else if(elem.id && elem.id=='commentArticleA'){
+	            	return;
+	            }else if(elem.id && elem.id=='comment-opt-bar2'){
+	            	return;
+	            }
+	            elem = elem.parentNode;
+	        }
+	        //这里写你想实现的效果
+	        $("#comment-opt-bar").css('display','none');
+	    });
+		//评论按钮显示
+		$("#commentArticle").click(function() {
+			$("#comment-opt-bar").css('display','block');
+			$(".sub-comment-btn").each(function() {
+				$(this).css("display", "block");
+			});
+		});
+		//取消回复
+		$(".cancle-comment-btn").click (function() {
+			$(this).css("display", "none");
+			//清空评论框
+			clearTextArea();
+			$("#commentArticle").attr("placeholder","想对作者说点什么");
+			$("#commentId").val("");
+		})
+		//清空回复框
+		function clearTextArea() {
+			$("#comment-opt-bar").css('display','none');
+			$("#commentId").val("");
+			$(".cancle-comment-btn").css("display", "none");
+			document.getElementById("commentArticle").value = "";
+			$("#commentArticle").attr("placeholder","想对作者说点什么");
+		}
+	</script>
+
+	<script type='text/javascript'>
+		var newCommentNum=0;
+		//用户评论博文
+		function submitComment() {
+			var articleId = $("#articleId").val();
+			var commentText = $("#commentArticle").val();
+			var userId = $("#userId").val();// 当前用户的id
+			var commentId=$("#commentId").val();//评论id(二级评论时用到)
+			var username=$("#username").val();//用于回显
+			var userIcon=$("#icon").val();//用于回显
+			$.ajax({
+				type : "POST",
+				url : "/comment",
+				data : {
+					articleId : articleId,
+					commentText : commentText,
+					userId : userId,
+					parentId:commentId,
+				},
+				dataType : "JSON",
+				success : function(result) {
+					if(result.status==500){
+						alert(result.msg);
+					}else if(result.status==200&&commentId==""){
+						//显示新的评论
+						let html='<div class="yyy"></div>';
+						let newCommentClass='new_comment'+newCommentNum;
+						html=html.replace(/yyy/g,newCommentClass);
+						$(".new_comment").append(html);
+						$(".new_comment"+newCommentNum).load("/comment/show-new-comment", {"commentId":result.data,"articleId" : articleId,"commentText":commentText,"userId":userId,"parentId":commentId,"username":username,"userIcon":userIcon});
+						newCommentNum++;
+						//清空评论框
+						clearTextArea();
+					}else if(result.status==200&&commentId!=""){
+						//回复子评论
+						//刷新评论区
+						$(".commentList_body").load("/comment/refresh-comment",{"articleId":articleId,"userId":userId});
+						$(".new_comment").empty();
+						//清空评论框
+						clearTextArea();
+					}
+				}
+			})
+		}
+
+		//点击回复，显示被回复用户名
+		function showCommentUser(commentId){
+				$("#commentId").val(commentId);
+				$("#comment-opt-bar").css('display','block');
+				$(".cancle-comment-btn").css("display", "block");
+				$(".sub-comment-btn").each(function() {
+					$(this).css("display", "block");
+				});
+				$("#commentArticle").attr("placeholder","回复: "+$(".username"+commentId).val());
+		}
+		//查看回复（多级评论）
+		function showReply(commentId){
+			$(".PComment"+commentId).find('.comment_look_select.show').css("display","none");
+			$(".PComment"+commentId).find('.comment_look_close.comment_look_select').css("display","block");
+			//此处将cid作为pid投入
+			$(".commentParentFoot"+commentId).load("/comment/show-reply-comment", {"commentId":commentId})
+			
+			
+		}
+		//收起回复
+		function closeReply(commentId){
+			$(".PComment"+commentId).find('.comment_look_select.show').css("display","block");
+			$(".PComment"+commentId).find('.comment_look_close.comment_look_select').css("display","none");
+			$(".commentParentFoot"+commentId).empty();
+		}
+
+
+
+		//删除一级评论
+		function delectPComment(commentId){
+			if(!confirm("是否删除评论？")){
+				return;
+			}
+			$.ajax({
+				"url" : "/comment/delect-comment",
+				"data" : {commentId:commentId},
+				"type" : "post",
+				"dataType" : "json",
+				"success" : function(result) {
+					$(".PComment"+commentId).parent().remove();
+					$(".new_comment_id"+commentId).parent().remove();
+				},
+				"error":function(XMLHttpRequest, textStatus, errorThrown){
+					alert("请求失败")
+					}
+			});
+		}
+		//删除多级评论
+		function delectSComment(commentId){
+			var articleId = $("#articleId").val();
+			var userId = $("#userId").val();// 当前用户的id
+			if(!confirm("是否删除评论？")){
+				return;
+			}
+			$.ajax({
+				"url" : "/comment/delect-comment",
+				"data" : {commentId:commentId},
+				"type" : "post",
+				"dataType" : "json",
+				"success" : function(result) {
+					$(".commentList_body").load("/comment/refresh-comment",{"articleId":articleId,"userId":userId});
+					$(".new_comment").empty();
+				},
+				"error":function(XMLHttpRequest, textStatus, errorThrown){
+					alert("请求失败")
+					}
+			});
+		}
+
+	</script>
+
+</body>
+<script type="text/javascript">
+	//获取公共属性
+	var userId = $("#userId").val();
+	var articleId = $("#articleId").val();
+	var collectId = $('#isCollectId').val();
+	var likeId = $('#isLike').val();
+
+	$(document).ready(function() {
+		//文章页面弹框显示js
+		//解析makedown编辑器
+		editormd.markdownToHTML("md-content", {
+			htmlDecode : "style,script,iframe",
+			emoji : true,
+			taskList : true,
+			tex : true, // 默认不解析
+			flowChart : true, // 默认不解析
+			sequenceDiagram : true
+		// 默认不解析
+		});
+		if (collectId != null && collectId != '') {
+			var collect = document.getElementsByClassName('isCollect');
+			for (var i = 0; i < collect.length; i++) {
+				collect[i].innerHTML = "取消收藏"
+			}
+		}
+		if (likeId != null && likeId != '') {
+			$(".bottom-message .like").css('background-color', '#f9ecec');
+		}
+
+	});
+	//收藏操作
+	function doCollect() {
+		//再次点击收藏后从新获取一遍上一便跟新的收藏
+		var collectId = $('#isCollectId').val();
+		$.ajax({
+			type : "GET",
+			url : "/user/power/collect",
+			data : {
+				articleId : articleId,
+				collectId : collectId,
+				userId : userId
+			},
+			dataType : "JSON",
+			success : function(result) {
+				if (result.status == 200 && result.data != null) {
+					$('#isCollectId').val(result.data);
+					var collect = document.getElementsByClassName('isCollect');
+					for (var i = 0; i < collect.length; i++) {
+						collect[i].innerHTML = "取消收藏"
+					}
+				} else if (result.status == 200) {
+					$('#isCollectId').val(result.data);
+					var collect = document.getElementsByClassName('isCollect');
+					for (var i = 0; i < collect.length; i++) {
+						collect[i].innerHTML = "收藏"
+					}
+				}
+			}
+		});
+	}
+	//点赞操作
+	function doLike() {
+		//>2次点击喜欢 后从新获取一遍上一便跟新的喜欢id
+		var likeId = $('#isLike').val();
+		//文章总赞数
+		var likes = $("#likes").html();
+		//用户获赞数
+		var userLikes = $("#userLikes").html();
+		$.ajax({
+			type : "GET",
+			url : "/user/power/likes",
+			data : {
+				likeId : likeId,
+				articleId : articleId,
+				userId : userId
+			},
+			dataType : "JSON",
+			success : function(result) {
+				//页面显示点赞数量
+				if (result.status == 200 && result.data == null) {
+					//已取消点赞
+					//修改全局更新后的likeId
+					$('#isLike').val(result.data);
+					$("#likes").html(--likes);
+					$("#userLikes").html(--userLikes);
+					$(".bottom-message .like").css('background-color',
+							'#f5f6f7');
+				} else if (result.status == 200) {
+					$('#isLike').val(result.data);
+					$("#likes").html(++likes);
+					$("#userLikes").html(++userLikes);
+					$(".bottom-message .like").css('background-color',
+							'#f9ecec');
+				}
+			}
+		});
+
+	}
+	//显示举报模态框
+	function openReportModal() {
+		//$('#modal-content')
+		layui.use('layer', function() {
+			layer.open({
+				type : 1,
+				title : '举报',
+				area : [ '500px', '260px' ],
+				shade : [ 0.6, '#FF0000' ],//遮罩
+				anim : 6,//抖动
+				content : $('#modalContent'),
+				btn : [ '取消', '确定', ],
+				yes : function(index, layero) {
+					//按钮【按钮一】的回调
+					layer.close(index);
+				},
+				btn2 : function(index, layero) {
+					//按钮【按钮二】的回调
+					//return false 开启该代码可禁止点击该按钮关闭
+					var reportMsg = $("#box-input-text").val();
+					alert(reportMsg)
+					$.ajax({
+						type : "GET",
+						url : "/user/power/report",
+						data : {
+							articleId : articleId,
+							reportMsg : reportMsg,
+							userId : userId
+						},
+						dataType : "JSON",
+						success : function(result) {
+							if (result.status == 200) {
+								alert("举报成功!!!");
+							} else {
+								alert(result.msg);
+							}
+						}
+					});
+				}
+			});
+		});
+
+	};
+</script>
+</html>

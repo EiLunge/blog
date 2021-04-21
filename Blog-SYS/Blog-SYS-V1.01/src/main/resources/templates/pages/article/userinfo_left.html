@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>右侧推荐栏</title>
+</head>
+<style type="text/css">
+.userinfo-left .main-recommend {
+	width: 200px;
+}
+
+.userinfo-left .layui-table {
+	margin-right: 5px;
+}
+
+.userinfo-left .layui-table th {
+	background-color: #fff;
+}
+
+.userinfo-left .text-hide {
+	overflow: hidden;
+	width: 150px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+ .userinfo-left .text-hide.article-title a{
+	color:RGB(178, 229, 255);
+}
+.userinfo-left .text-hide.article-title a:hover{
+	color:RGB(76, 102, 140);
+} 
+.userinfo-left .user-commnet.ellipsis {
+display:flex;
+
+}
+.userinfo-left .user-commnet.ellipsis a{
+    color: #858585;
+}
+.userinfo-left .user-commnet.ellipsis .comment{
+flex:3;
+display: -webkit-box;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+}
+.userinfo-left .user-commnet.ellipsis a:hover{
+color: rgb(217, 83, 90);
+}
+.userinfo-left a.other-name{
+word-wrap: break-word;
+    color: #858585;
+}
+.userinfo-left  .ellipsis:before {
+    /* content: '...'; */
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: 0;
+    width: 24px;
+    padding-left: 8px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    /* background-color: #fff; */
+    background: -webkit-gradient(linear,left top, right top,from(transparent),color-stop(40%, #fff));
+    background: linear-gradient(to right,transparent,#fff 40%);
+}
+.userinfo-left .user-commnet{
+	    font-size: 12px;
+    color: #858585;
+    word-wrap: break-word;
+    vertical-align: top;
+    display: block;
+    word-break: break-all;
+
+}
+.userinfo-left .ellipsis{
+position: relative;
+    line-height: 1.5em;
+    max-height: 3em;
+    overflow: hidden;
+}
+
+
+.userinfo-left .guidang-text2 {
+	float: right;
+}
+/*左上角头像 */
+.userinfo-left .item2 {
+	margin-left: 25px;
+	margin-left: 10px;
+	margin-right: -10px;
+}
+
+.userinfo-left .item2 .user .link {
+	display: flex;
+	align-items: center;
+	padding: 5px 0px 5px 12px;
+	min-height: 6.6rem;
+	margin
+}
+
+.userinfo-left .item2 .user .link .user-icon-img {
+	flex: 0 0 auto;
+	margin-right: 10px;
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+}
+
+.userinfo-left .item2 .user .link .info-box {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.userinfo-left .item2 .user .link .info-box .user-name {
+	font-size: 14px;
+	font-weight: 600;
+	color: #2e3135;
+}
+
+.userinfo-left .item2 .user .link .info-box .user-job {
+	padding-top: 0.6rem;
+	font-size: 10px;
+	color: rgb(168, 168, 168);
+}
+
+.userinfo-left .item2 .user .link .info-box .job {
+	margin-top: 0.96rem;
+	font-size: 1.6rem;
+	font-weight: 500;
+	color: #b9c0c8;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.userinfo-left .item2 .user .follow-btn {
+	background-color: rgb(167, 207, 116);
+	margin-right: 10px;
+}
+
+.userinfo-left .userinfo-btn-box {
+	background-color: #fff;
+	margin: 0 -10px 10px 10px;
+	text-align: center;
+	padding: 38px 4px 21px 4px;
+}
+
+.userinfo-left .userinfo-btn {
+	height: 35px;
+	width: 89px;
+}
+
+.userinfo-left .layui-btn+.layui-btn {
+	margin-left: 8px;
+}
+.userinfo-left  td a:hover{
+color:red;
+}
+</style>
+<body>
+	<div class="userinfo-left">
+		<div class="main-recommend x">
+			<!-- 用户详情 -->
+			<div class="left-top-userinfo">
+						<table class="layui-table userinfo" lay-skin="nob"
+				style="margin-bottom: 0px;">
+				<thead>
+					<tr>
+						<div class="item2" style="background-color: #fff;">
+							<div class="user">
+								<a th:href="'/user/other/'+${other?.user?.username}" target="_blank" class="link">
+									<div class="avatar user-icon">
+										<image th:src="${other == null ? 
+                      '/images/login.jpg' :
+                       other?.user?.icon}"class="user-icon-img user-icon"
+											src="/images/bajie-1.jpg" />
+									</div>
+									<div class="info-box">
+										<object>
+											<a th:href="'/user/other/'+${other?.user?.username}" target="_blank"
+												class="user-name"><span
+												th:text="${other == null ?'用户':other?.user?.username}">高富帅</span></a>
+										</object>
+										<div class="user-job">
+											<span th:text="${other == null ?'职业':other?.user?.job}">我是高富帅</span>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td
+							style="padding: 0px; text-align: center; color: black; font-weight: 600; font-size: 10px;">
+							<span class='text-hide'>原创</span>
+						</td>
+						<td
+							style="padding: 0px; text-align: center; color: black; font-weight: 600; font-size: 10px;">
+
+							<span class='text-hide'>粉丝</span>
+						</td>
+						<td
+							style="padding: 0px; text-align: center; color: black; font-weight: 600; font-size: 10px;">
+
+							<span class='text-hide'>获赞</span>
+						</td>
+						<td
+							style="padding: 0px; text-align: center; color: black; font-weight: 600; font-size: 10px;">
+
+							<span class='text-hide'>评论</span>
+						</td>
+
+					</tr>
+					<tr>
+						<td style="padding: 0px; text-align: center;"><span
+							class='text-hide'><span
+								th:text="${other == null ?'0':other?.userDetail?.articleNum}">666</span></span></td>
+						<td style="padding: 0px; text-align: center;"><span
+							class='text-hide'><span
+								th:text="${other == null ?'0':other?.userDetail?.fansNum}" id="fansNum">666</span></span></td>
+						<td style="padding: 0px; text-align: center;"><span
+							class='text-hide'><span
+								th:text="${other == null ?'0':other?.userDetail?.haveLikesNum}" id="userLikes">666</span></span></td>
+						<td style="padding: 0px; text-align: center;"><span
+							class='text-hide'><span
+								th:text="${other == null ?'0':other?.userDetail?.likesNum}">666</span></span></td>
+					</tr>
+				</tbody>
+
+			</table>
+			<div class="userinfo-btn-box">
+				<button 
+					class="layui-btn layui-btn-normal userinfo-btn follow-btn btn01"
+					th:value="${other?.user?.userId}" onclick="addFollow(this.value)">关注</button>
+				<button class="layui-btn layui-btn-normal userinfo-btn btn02">私信</button>
+			</div>
+			
+			</div>
+
+			<div class="main-recommend main-left-contest">
+				<!--最新文章 -->
+				<table class="layui-table">
+					<thead>
+						<tr>
+							<th><span style="color: #cf2730; font-size: 20px">|</span>
+								最新文章</th>
+						</tr>
+					</thead>
+					<tbody >
+						<!--  -->
+						<tr th:each="article : ${userArticles}" th:if="${articleStat.index}<4">
+							<td style="padding: 6px 15px;">
+								<div class='text-hide'>
+									<a th:text="${article.title}"
+										th:href="@{'/user/article/detail/'+${article.articleId}}">人生就像是一场修行，修行不到家只能还俗了！</a>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!--最新评论 -->
+				<table class="layui-table main-recommend">
+					<thead>
+						<tr>
+							<th><span style="color: #cf2730; font-size: 20px">|</span>
+								最新评论</th>
+						</tr>
+					</thead>
+					<tbody  class="left-userCommnets">
+						<tr th:each="userComment : ${userComments}" th:if="${userCommentStat.index lt 4} ">
+							<td style="padding:5px 15px">
+								<div class='text-hide article-title'>
+									<a th:text="${userComment.articleTitle}"
+										th:href="@{'/user/article/detail/'+${userComment.comment.articleId}}">人生就像是一场修行，修行不到家只能还俗了！人生就像是一场修行，修行不到家只能还俗了！人生就像是一场修行，修行不到家只能还俗了！人生就像是一场修行，修行不到家只能还俗了！人生就像是一场修行，修行不到家只能还俗了！</a>
+								</div>
+								<p class="user-commnet ellipsis"><a  th:href="'/user/other/'+${other?.user?.username}" class="other-name" target="_blank" th:text="${other?.user?.username}+':'">1234:</a><span class="comment"  th:text="${userComment.comment.commentText}">6666666666666666666666666666666666666666666666666666666666666</span></p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!--归档 -->
+				<table class="layui-table main-recommend">
+					<thead>
+						<tr>
+							<th><span style="color: #cf2730; font-size: 20px">|</span>归档</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="userArchiver : ${userArchivers}">
+							<td><a th:href="'/user/other/archiver?username='+${other?.user?.username}+'&&yearMonth='+${userArchiver.yearMonth}" target="_blank" ><span class='guidang-text1'><span th:text="${userArchiver.yearMonthStr}">2020年1月</span></span>
+								<div class='guidang-text2'><span th:text="${userArchiver.count}">1</span>篇</div></a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript">
+		$(document).ready(function() {
+		if ($('#isFollow').val() != null && $('#isFollow').val() != 0) {
+			//之前写的时候没考虑其他分块还有一个按钮
+			$('.follow-btn').text('取消关注');
+		}
+		 $("tr").hover(function(){
+			    $(this).css("background-color","#fff");
+			    },function(){
+			    $(this).css("background-color","#fff");
+			  });
+	});
+	function addFollow(otherId) {
+		var uid = $("#userId").val();
+		$.ajax({
+			type : "GET",
+			url : "/user/power/follow",
+			data : {
+				uid : uid,
+				otherId : otherId
+			},
+			dataType : "JSON",
+			success : function(result) {
+				if (result.status == 200 && result.data != 0) {
+					$('.follow-btn').text('取消关注');
+					var fansNum = document.getElementById('fansNum').innerHTML;
+					document.getElementById('fansNum').innerHTML = ++fansNum;
+				} else if (result.status == 200 && result.data == 0) {
+					$('.follow-btn').text('关注');
+					var fansNum = document.getElementById('fansNum').innerHTML;
+					document.getElementById('fansNum').innerHTML = --fansNum;
+				} else if (result.status == 201) {
+					alert(result.msg);
+				}
+			}
+		});
+	}
+</script>
+</html>

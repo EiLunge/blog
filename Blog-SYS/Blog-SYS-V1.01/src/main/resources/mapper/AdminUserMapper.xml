@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace对应哪个接口 -->
+<mapper namespace="com.sx.blog.admin.mapper.AdminUserMapper">
+
+
+	<resultMap type="com.sx.blog.admin.enetity.User" id="UserEntityMap">
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="e_mail" property="eMail"/>
+		<result column="gender" property="gender"/>
+		<result column="create_time" property="createTime"/>
+	</resultMap>
+		
+	<select id="selectAllUser" resultMap="UserEntityMap">
+		select username,password,e_mail,gender,create_time,job from public.user
+	</select>
+	
+	<update id="updateUser">
+			
+		 update  
+		 					public.user 
+		 set 
+		  			e_mail=#{eMail},gender=#{gender},job=#{job}
+		 where 
+		  			username=#{username}
+		
+	</update>
+	
+	
+	
+	
+</mapper>
+

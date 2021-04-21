@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace对应哪个接口 -->
+<mapper namespace="com.sx.blog.admin.mapper.HotArticleMapper">
+
+
+	<!-- 根据点赞数量查询排名前三的文章 -->
+	<select id="selectHotArticle"
+		resultType="com.sx.blog.common.pojo.Article">
+		select
+		title,likes,create_time,browse,pc_content,article_id
+		from
+		public.article
+		order by
+		likes
+		desc
+	</select>
+
+	<!-- 查询热门文章内容 -->
+	<select id="selectHotPcc"
+		resultType="com.sx.blog.common.pojo.Article">
+		select
+		pc_content,article_id
+		from
+		public.article
+		where
+		article_id=#{articleId}
+	</select>
+
+	<select id="updateArticle"
+		resultType="com.sx.blog.admin.enetity.UpdateArticle">
+		select
+		pc_content
+		from
+		public.article
+
+		where
+		article_id=#{articleId}
+	</select>
+
+
+</mapper>
+

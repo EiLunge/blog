@@ -1,0 +1,86 @@
+
+	<input type="hidden" th:value="${moreLikeCommmentIdList}" class="moreLikeCommmentIdList">		
+		<!-- 用于展示新评论-->
+		<div class="area_comment_look" th:classappend="new_comment_id+${newComment?.comment?.commentId}" th:if="${newComment}!=null"
+			style="overflow: hidden; background-color: #fff;">
+			<input type="hidden" th:classappend="username+${newComment?.comment?.commentId}" th:value="${newComment?.username}">
+			<div class="area_comment_message">
+				<div class="layui-col-md1 image_icon">
+					<!-- 评论人的头像 -->
+					<a th:href="'/user/other/'+${newComment?.username}"
+						target="_blank"> <image class="comment-user-icon user-icon"
+							th:src="@{${newComment?.userIcon}}" src="/images/bajie-1.jpg" />
+					</a>
+				</div>
+				<a th:text="${newComment?.username}" class="names01 user-name"
+					th:href="'/user/other/'+${newComment?.username}"
+					target="_blank">大帅比</a> <span
+					th:text="${newComment?.comment?.createTime}" class="comment_look_time">2020-01-10
+					12:33:25</span> 
+					
+				<div class="comment_look_support new" th:value="${newComment?.comment?.commentId}" style="width: 55px;"onclick="doNCommentSupport($(this).attr('value'))">
+					<text class="iconfont icon-zan" style="font-size: 18px; "></text>
+					<span th:text="${newComment?.comment?.likes}!=0?${newComment?.comment?.likes}:''"class="commentLikesN"></span>
+				</div>
+				
+				<div id="art_look_for">
+					<a th:text="'查看回复（'+${newComment?.sonCommentNum+'）'}"
+						th:value="${newComment?.comment?.commentId}"
+						onclick="commentRepaly($(this).attr('value'))"
+						class="comment_look_select" href="javascript:void(0);">查看回复 </a>
+				</div>
+				<div id="comment-opt-bar2" style="display: none;" class="comment-opt-bar2">
+				<a class="comment_look_delete"
+					th:value="${newComment?.comment?.commentId}"
+					onclick="showCommentUser($(this).attr('value'))"
+					href="javascript:void(0);">回复</a> 
+				<a class="comment_look_delete" href="javascript:void(0);"
+						th:value="${newComment?.comment?.commentId}"
+						onclick="delectPComment($(this).attr('value'))">删除</a>
+				</div>
+			</div>
+			<div th:text="${newComment?.comment?.commentText}"
+				class="comment_look_text">这里是对文章的评论内容:长太息以掩涕兮，哀民生之多艰，余虽好修姱以鞿羁兮，謇朝谇而夕替，既替余以蕙纕兮，又申之以揽茝。</div>
+		</div>
+<script type="text/javascript">
+		$(document).ready(
+				function() {
+					$(".area_comment_look").hover(
+							function() {
+								$(this).find('.comment-opt-bar2').css(
+										'display', 'block');
+							},
+							function() {
+								$(this).find('.comment-opt-bar2').css(
+										'display', 'none');
+							})
+				}
+				)
+		//点赞操作(注：下面class完全不一样)
+		function doNCommentSupport(commentId){
+			var userId=$('#userId').val();
+			$.ajax({
+				type : "GET",
+				url : "/user/power/do-comment-like",
+				data : {
+					commentId : commentId,
+					userId : userId,
+				},
+				dataType : "JSON",
+				success : function(result) {
+					if(result.data==1){
+						$(".new_comment_id"+commentId).find(".comment_look_support.new").css("color","rgb(202, 12, 22)");
+						var likesNum=$(".new_comment_id"+commentId).find(".commentLikesN").text();
+						//likesNum = parseInt(likesNum) + 1;
+						$(".new_comment_id"+commentId).find(".commentLikesN").text(++likesNum);
+					}else if(result.data==0){
+					$(".new_comment_id"+commentId).find(".comment_look_support.new").css("color","#4d4d4d");
+					var likesNum=$(".new_comment_id"+commentId).find(".commentLikesN").text();
+					var likeNum2=--likesNum==0?"":likesNum;
+					$(".new_comment_id"+commentId).find(".commentLikesN").text(likeNum2);}
+				}
+			});
+
+		}
+</script>
+		

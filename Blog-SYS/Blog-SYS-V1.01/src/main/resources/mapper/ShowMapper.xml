@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace:对应哪个接口 -->
+<mapper namespace="com.sx.blog.sys.mapper.ShowMapper">
+
+	<resultMap id="ArticlePojoMap"
+		type="com.sx.blog.common.pojo.Article">
+		<id column="article_id" property="articleId" />
+		<result column="user_id" property="userId" />
+		<result column="tag_id" property="tagId" />
+		<result column="pc_content" property="pcContent" />
+		<result column="wx_content" property="wxContent" />
+		<result column="comment_num" property="commentNum" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+	<resultMap id="TagPojoMap" type="com.sx.blog.common.pojo.Tag">
+		<id column="tag_id" property="tagId" />
+		<result column="tag_name" property="tagName" />
+	</resultMap>
+
+	<!-- 创建文章信息，写入数据库 -->
+	<insert id="insertArticle" useGeneratedKeys="true"
+		keyProperty="articleId">
+		insert into article
+		(user_id,tag_id,title,pc_content,likes,comment_num,create_time,status,browse)
+		values(#{userId},#{tagId},#{title},#{pcContent},#{likes},#{commentNum},#{createTime},#{status},#{browse})
+	</insert>
+
+	<!-- 根据时间倒序查询最新八篇文章 List<Article> findByDescTime() -->
+	<select id="findByDescTime" resultMap="ArticlePojoMap">
+		SELECT * FROM article
+		WHERE status=1 ORDER BY create_time DESC limit 8 offset 0
+	</select>
+
+	<!-- 根据标签id查询标签名 String findTagNameByTagId(Integer tagId); -->
+	<select id="findTagNameByTagId" resultType="String">
+		select tag_name from
+		tag where tag_id=#{tagId}
+	</select>
+
+	<!--根据用户id查询用户名 String findUserNameByUserId(Integer userId) -->
+	<select id="findUserNameByUserId" resultType="String">
+		select username
+		from public.user where user_id=#{userId}
+	</select>
+
+	<!-- 根据文章标题查询相关的文章 List<Article> findByTitle(String title) -->
+	<select id="findByTitle" resultMap="ArticlePojoMap">
+		select * from public.article
+		where status=1 and title like #{title} ORDER BY create_time DESC
+	</select>
+
+	<!-- 查询最近7天评论最多的五篇文章的标题List<TitleArticleVO> findTitleByCommentNum() -->
+	<select id="findArticlesByTime" resultType="article">
+		select title,article_id from public.article
+		where status = 1 and create_time
+		between current_date-7 and current_timestamp
+	</select>
+
+
+	<!-- 查询最近15天游览量最多的五篇文章标题（15天内）List<TitleArticleVO> findTitleByBrowse() -->
+	<select id="findTitleByBrowse"
+		resultType="com.sx.blog.common.vo.TitleArticleVO">
+		select title,article_id from public.article
+		where status = 1 and create_time
+		between current_date-15 and current_timestamp
+		order by browse DESC limit 5 offset 0
+	</select>
+
+	<!-- 查询文章表中所有的标签 List<String> findAllTagId() -->
+	<select id="findAllTagId" resultType="String">
+		select tag_id from
+		public.article where status = 1
+	</select>
+
+	<!-- 通过用户id获取关注人的id List<Integer> findFollowUserByUserId(Integer userId) -->
+	<select id="findFollowUserByUserId" resultType="Integer">
+		select
+		follow_user from public.follow where user_id=#{userId}
+	</select>
+
+	<!-- 用户id获取关注人的id=>通过关注人的id获取关注人的博文 List<Article> findFollowArticleByUsreId(Integer 
+		userId) -->
+	<select id="findFollowArticleByUserId"
+		resultMap="ArticlePojoMap">
+		select * from public.article where status=1 and user_id
+		in(select follow_user from public.follow where user_id=#{userId})
+		ORDER BY create_time DESC limit 8 offset 0
+	</select>
+
+	<!-- 通过标签名查询标签id Integer findTagIdByTagName(String tagName) -->
+	<select id="findTagIdByTagName" resultType="Integer">
+		select tag_id from
+		public.tag where tag_name=#{tagName}
+	</select>
+
+
+
+	<!-- 查询被推荐文章 -->
+	<select id="findArticleByRecommend" resultType="Article">
+		SELECT
+		*
+		FROM
+		"public".article
+		WHERE
+		"public".article.recommend = 1
+		ORDER BY update_time DESC limit 4 offset 0
+	</select>
+
+	<!-- 从标签表中查询所有标签名 List<String> findAllTagsWithTag(); -->
+	<select id="findAllTagsWithTag" resultType="tag">
+		SELECT * FROM
+		public.tag
+	</select>
+	
+	<!-- 根据文章id查询用户头像 List<String> findIconByArticleId(Integer articleId); -->
+	<select id="findIconByArticleId" resultType="String">
+		select icon from
+		public.user where
+		user_id = (select user_id from public.article where article_id=#{articleId})
+	</select>
+
+	<!-- 通过文章id查询用户id Integer findUserIdByArticleId(Integer articleId); -->
+	<select id="findUserIdByArticleId" resultType="Integer">
+		SELECT user_id
+		FROM public.article where article_id=#{articleId}
+	</select>
+
+	<!-- 文章查询 -->
+	<select id="getArtilesByParam" parameterType="queryArticleParam" resultType="article">
+SELECT
+*
+FROM
+"public".article
+ <where>
+	  <if test="title != null and title != ''">
+	   AND "public".article.title LIKE '%${title}%'
+	  </if> 
+ 	  <if test="tagId != null and tagId != ''">
+	   AND "public".article.tag_id LIKE '%${tagId}%'
+	  </if> 
+	  AND "public".article.status=1
+</where>
+ORDER BY
+"public".article.update_time DESC
+LIMIT 8 OFFSET #{index}
+	</select>
+
+</mapper>

@@ -1,0 +1,92 @@
+
+        <div class="sub-header">
+            <div class="sub-header-title">动态</div>
+        </div>
+        <div class="sub-item" >
+           <ul class="article-list" th:fragment="article-list-thy" th:each="article : ${myArticles}">
+                <li class="article">
+                    <div class="entry">
+                        <div class="content">
+                            <h2 ><a th:href="@{'/user/article/detail/'+${article.articleId}}"  target="_blank" class="title"><span
+						class="recommend recommend-text" th:if="${article.recommend}==1">
+							荐 </span><span th:text="${article?.title}">Qt实用技巧：使用OpenCV库操作摄像头拍照、调节参数</span></a>
+				</h2>
+                            <div th:text="${article?.abstracts}" class="summary">
+	                                欢迎来到“Python进阶”专栏！来到这里的每一位同学，应该大致上学习了很多 Python
+	                                的基础知识，正在努力成长的过程中。在此期间，一定遇到了很多的困惑，对未来的学习方向感到迷茫。我非常理解你们所面临的处境。我从2007年开始接触 python
+	                                这门编程语言，从2009年开始单一使用 python
+	                                应对所有的开发工作，直至今天。回顾自己的学习过程，也曾经遇到过无数的困难，也曾经迷茫过、困惑过。开办这个专栏，正是为了帮助像我当年一样困惑的 Python
+	                                初学者走出困境、快速成长。希望我的经验能真正帮到你 </div>
+                            <dl class="user-bar">
+                                <dt><a th:href="'/user/other/'+${userVo.user?.username}" target="_blank" class="user_img">
+                                <!-- th:src="@{${userVo?.user?.icon}}" -->
+                                        <img   src="/images/bajie-1.jpg"  th:src="${userVo.user?.icon}"
+                                            alt="silentwolfyh" class="user-icon" title="silentwolfyh" username="silentwolfyh">
+                                    </a></dt>
+                                    <!-- th:text="${userVo?.user?.username}" -->
+                                <dd  class="user_name" th:text="${userVo.user?.username}">pig</dd>
+                                <div class="interactive">
+                                    <span class="click_heart">
+                                        <a th:href="@{'/user/article/detail/'+${article.articleId}}">
+                                            <span class="text">
+                                                <i class="layui-icon layui-icon-praise"></i>
+                                            </span>
+                                            <span  th:text="${article?.likes}" class="num">666</span>
+                                        </a>
+                                    </span>
+                                    <span class="read_num">
+                                        <a th:href="@{'/user/article/detail/'+${article.articleId}}">
+                                            <span class="text">
+                                                <text class="iconfont icon-youlan"></text>
+                                            </span>
+                                            <span th:text="${article?.browse}" class="num">666</span>
+                                        </a>
+                                    </span>
+                                    <span class="comment_num">
+                                        <a th:href="@{'/user/article/detail/'+${article.articleId}}">
+                                            <span class="text">
+                                                <text class="iconfont icon-huifu"></text>
+                                            </span>
+                                            <span  th:text="${article?.commentNum}" class="num">666</span></a>
+                                    </span>
+                                    <span class="delect">
+                                <button class="delect-btn layui-btn" th:value="${article.articleId}" onclick="delectArticle(this.value)" style="margin-left: 14px;height: 36px;background-color: red;">删除文章</button>
+                            </span>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </li>
+      <script type="text/javascript">
+$(document).ready(function() {
+	$(".user-icon").each(function() {
+	var iconSrc=$(this).attr('src');
+	if(iconSrc.indexOf("?") == -1){
+		$(this).attr("src",iconSrc+"?timeStamp=("+new Date()+')');
+		}
+	});
+});
+function delectArticle(articleId){
+	 var userId = $("#userId").val();
+			if(!confirm("是否删除这篇文章？")){
+				return;//选择取消直接返回
+			}
+	$.ajax({
+		type : "GET",
+		url : "/article/delete",
+		data : {
+			articleId : articleId
+		},
+		dataType : "JSON",
+		success : function(result) {
+			if (result.status == 200) {
+				$('#list-body').load('/user/list-body-dt');
+				var dynamicNum=$('#userinfo-dynamicNum').text();
+				if(dynamicNum!=0){$('#userinfo-dynamicNum').text(--dynamicNum)};
+			}
+		}
+	});
+}
+</script>
+            </ul>
+        </div>

@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!--导入核心文件-->
+<script src="bootstrap3/js/holder.js"></script>
+<link href="bootstrap3/css/bootstrap.css" rel="stylesheet"
+	type="text/css">
+<script th:src="@{bootstrap3/jquery-1.9.1.min.js}"></script>
+<script th:src="@{bootstrap3/js/bootstrap.js}"></script>
+<link rel="stylesheet" href="layui/css/layui.css">
+<link rel="stylesheet" href="layui/css/layui.css" media="all">
+<link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.4/css/layui.css"  media="all">
+<meta charset="UTF-8">
+<title>admin包下的index</title>
+<link rel="shortcut icon" href="http://www.sina.com.cn/favicon.ico" type="image/x-icon">
+<style type="text/css">
+.nextss{
+	left: 100px;
+}
+</style>
+</head>
+<body class="layui-layout-body">
+
+	<header>
+		<!-- 头部 -->
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header">
+				<div class="layui-logo">掘CSDN后台管理</div>
+				<!-- 头部区域（可配合layui已有的水平导航） -->
+
+				<ul class="layui-nav layui-layout-right">
+					<li class="layui-nav-item"><a href="javascript:;"> <img
+							src="http://t.cn/RCzsdCq" class="layui-nav-img"> 幕后黑手
+					</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="">基本资料</a>
+							</dd>
+							<dd>
+								<a href="">安全设置</a>
+							</dd>
+						</dl></li>
+					<li class="layui-nav-item"><a href="">退了</a></li>
+				</ul>
+			</div>
+			<div class="layui-side layui-bg-black">
+				<div class="layui-row">
+					<div class="layui-col-md2 ">
+						<ul class="layui-nav layui-nav-tree nav nav-tabs" lay-filter="test" role="tablist">
+							<li role="presentation" class="layui-nav-item  active">
+								<a href="#home" aria-controls="home" role="tab" data-toggle="tab">举报管理</a>
+							</li>
+							<li class="layui-nav-item" role="presentation">
+								<a id="userme" href="#profile" aria-controls="profile" role="tab"data-toggle="tab">用户管理</a>
+							</li>
+							<li class="layui-nav-item" role="presentation">
+								<a id="onc-hot" href="#messages" aria-controls="messages"	role="tab" data-toggle="tab">文章管理</a>
+							</li>
+							<li class="layui-nav-item" role="presentation">
+								<a	href="#settings" aria-controls="settings" role="tab"	data-toggle="tab">标签管理</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+
+				<!-- 正文区域 -->
+				<div class="layui-body">
+					<!-- 按钮组 -->
+					<div class="layui-col-md11">
+						<!-- Nav tabs -->
+
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="home">
+								<div id="parent">
+									<ul>
+										<li>
+											<table class="layui-table">
+												<colgroup>
+													<col width="150">
+													<col width="200">
+												</colgroup>
+												<thead>
+													<tr>
+														<th>用户名</th>
+														<th>文章名字</th>
+														<th>举报原因</th>
+														<th>用户操作</th>
+														<th>核实文章</th>
+													</tr>
+												</thead>
+												<tbody id="detail">
+													<tr th:each="u:${users}">
+														<td th:text="${u.username}">贤心</td>
+														<td th:text="${u.title}">2016-11-29</td>
+														<td th:text="${u.msg}">2016-11-29</td>
+														<td>
+															<button th:attr="notlogin=${u.username}" type="button"
+																id="notallow">禁止用户登录</button>
+															<button th:attr="login=${u.username}" type="button"
+																id="allow">允许用户登录</button>
+														</td>
+														<td>
+															<button type="button" id="details"
+																th:attr="lookarticle=${u.articleId}">
+																<a>查看文章详情</a>
+															</button>
+															<button type="button" id="delete"
+																th:attr="deletearticle=${u.articleId}">删除文章</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="profile">
+								<div role="tabpanel" class="tab-pane active" id="home">
+									<div id="parents">
+										<ul>
+											<li>
+												<table class="layui-table">
+													<colgroup>
+														<col width="150">
+														<col width="200">
+													</colgroup>
+													<thead>
+														<tr>
+															<th>用户名</th>
+															<th>电子邮箱</th>
+															<th>性别</th>
+															<th>工作</th>
+															<th>密码</th>
+															<th>创建时间</th>
+															<th>管理用户</th>
+														</tr>
+													</thead>
+													<tbody id="test">
+														<tr th:each="u:${user}">
+															<td th:text="${u.username}">贤心</td>
+															<td th:text="${u.eMail}">2016-11-29</td>
+															<td th:text="${u.gender}">2016-11-29</td>
+															<td th:text="${u.job}"></td>
+															<td th:text="${u.password}"></td>
+															<td th:text="${u.createTime}"></td>
+															<td>
+																<button id="test2">修改资料</button>
+																<button th:attr="notlogin=${u.username}" type="button"
+																id="test3">禁止登陆</button>
+																<button th:attr="login=${u.username}" type="button"
+																id="test4">允许登录</button>
+															</td>	
+														</tr>
+													</tbody>
+												</table>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="messages">
+								<div id="address-list">
+									<ul>
+										<li>
+											<table class="layui-table">
+												<colgroup>
+													<col width="150">
+													<col width="200">
+													<col>
+												</colgroup>
+												<thead>
+													<tr>
+														<th>文章标题</th>
+														<th>文章id</th>
+														<th>点赞数</th>
+														<th>创建时间</th>														
+														<th>浏览量</th>
+
+														<th>查看文章内容</th>
+													</tr>
+												</thead>
+												<tbody id="lookarthot">
+													<tr th:each="h:${hot}">
+														<td th:text="${h.title}">贤de</td>
+														<td th:text="${h.articleId}">贤de</td>
+														<td th:text="${h.likes}">贤de</td>
+														<td th:text="${h.createTime}">贤de</td>
+														<td th:text="${h.browse}">贤de</td>
+														<td>
+															<button type="button"  id="lokh"	th:attr="hottitle=${h.articleId}">
+																<a>查看文章</a>
+															</button>
+															<button type="button" id="check" th:attr="checkid=${h.articleId}">
+																修改文章
+															</button>
+															<button type="button" id="deleteart"	th:attr="deleteA=${h.articleId}">
+																<a>删除文章</a>
+															</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</li>
+									</ul>
+								</div>
+							</div>
+							
+							<div role="tabpanel" class="tab-pane" id="settings">
+							
+								<div id="tagparent">
+									<ul id="psa">
+										<li>
+											<table id="myTable1" class="layui-table">
+												<colgroup>
+													<col width="150">
+													<col width="200">
+													<col>
+												</colgroup>
+												<thead>
+													<!-- <td id="insert"> <button>添加标签</button> -->
+													<tr>
+														<th>标签</th>
+														<th>标签id</th>
+														<th>修改标签</th>
+														<th>删除标签</th>
+													</tr>
+												</thead>
+												<tbody id="upd">
+													<tr th:each="h:${tag}">
+														<td th:text="${h.tagName}">贤de</td>
+														<td th:text="${h.tagId}">贤de</td>
+														<td id="upde">
+															<button>修改标签</button>
+														</td>
+														<td>
+															<button type="button" id="delet"
+																th:attr="deletetag=${h.tagName}">删除标签</button>
+														</td>
+													</tr>				
+												</tbody>	
+											</table>																			
+										</li>
+									</ul>
+								</div>
+										<button type="button" id="nextss"><a>下一页</a></button>
+										<button type="button" id="up"><a>上一页</a></button>		
+							</div>	
+												
+						</div>
+					</div>
+				</div>
+					
+			</div>
+		</div>
+	</header>
+
+<script type="text/javascript" th:inline="javascript">
+	
+//分页下一页向后端传数据
+$('#nextss').on('click', function() {
+	 $("#upd").empty();
+  console.log("点击成功");
+	$.ajax({
+		"url" : "/pageTag",
+		"data" : {
+			"cou" : 10
+		},
+		"type" : "POST",
+		"dataType" : "json",
+		"success" : function(json) {
+			
+			let list = json.data;
+			console.log(list)
+			
+			
+			for (let i = 0; i<list.length; i++) {
+					let html = '<ul>'
+					+'<li>'
+					+'<table id="myTable1" class="layui-table">'
+					+	'<colgroup>'
+						+	'<col width="150">'
+							+'<col width="200">'
+							+'<col>'
+					+	'</colgroup>'
+					+'<thead>'
+					<!-- <td id="insert"> <button>添加标签</button> -->
+				+	'<tr th:each="h:${tag}">'
+				+	'	<th>标签</th>'
+				+		'<th>标签id</th>'
+				+		'<th>修改标签</th>'
+				+		'<th>删除标签</th>'
+			+	'	</tr>'
+			+	'</thead>'
+						+'<tbody id="upd">'
+							+'<tr>'
+								+'<td th:text="${h.tagName}">#{tagName}</td>'
+								+'<td th:text="${h.tagId}">#{tagId}</td>'
+								+'<td id="upde">'
+								+	'<button>修改标签</button>'
+							+'	</td>'
+							+	'<td>'
+								+	'<button type="button" id="delet" th:attr="deletetag=${h.tagName}">删除标签</button>'
+							+	'</td>'
+						+	'</tr>	'			
+						+'</tbody>	'
+					+'</table>	'																		
+				+'</li>'
+			+'</ul>'  
+			html = html.replace(/#{tagName}/g,list[i].tagName);
+			html = html.replace(/#{tagId}/g,list[i].tagId);
+			console.log(html)
+			$("#upd").append(html); 
+				}
+			}		    		
+		
+	});
+});
+//分页上一页向后端传数据
+$('#up').on('click', function() {
+	 $("#psa").empty();
+  console.log("点击成功");
+	$.ajax({
+		"url" : "/pageTagUp",
+		"data" : {
+			"cou" : 20
+		},
+		"type" : "POST",
+		"dataType" : "json",
+		"success" : function(json) {
+			
+			let list = json.data;
+			console.log(list)
+			
+			
+			for (let i = 0; i<list.length; i++) {
+					let html = '<ul>'
+					+'<li>'
+					+'<table id="myTable1" class="layui-table">'
+					+	'<colgroup>'
+						+	'<col width="150">'
+							+'<col width="200">'
+							+'<col>'
+					+	'</colgroup>'
+				+	'<thead>'
+					<!-- <td id="insert"> <button>添加标签</button> -->
+				+	'<tr>'
+				+		'<th>标签</th>'
+					+	'<th>标签id</th>'
+				+		'<th>修改标签</th>'
+				+		'<th>删除标签</th>'
+				+	'</tr>'
+				+'</thead>'
+					
+						+'<tbody id="upd">'
+							+'<tr>'
+								+'<td >#{tagName}</td>'
+								+'<td >#{tagId}</td>'
+								+'<td id="upde">'
+								+	'<button>修改标签</button>'
+							+'	</td>'
+							+	'<td>'
+								+	'<button type="button" id="delet" th:attr="deletetag=${h.tagName}">删除标签</button>'
+							+	'</td>'
+						+	'</tr>	'			
+						+'</tbody>	'
+					+'</table>	'																		
+				+'</li>'
+			+'</ul>'  
+			html = html.replace(/#{tagName}/g,list[i].tagName);
+			html = html.replace(/#{tagId}/g,list[i].tagId);
+			
+			$("#psa").append(html);
+				}
+			
+			}		    		
+		
+	});
+});
+	
+	
+		/* 删除热门文章 */
+		$("#address-list").on('click', '#deleteart', function() {
+			console.log($(this).attr('deleteA'));//文章id
+			$.ajax({
+				"url" : "/delete",
+				"data" : {
+					"artid" : JSON.stringify($(this).attr('deleteA'))
+				},
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+
+					if (json.status == 200) {
+						alert("修改成功" + "！");
+
+					}
+					if (json.status == 600) {
+						alert("修改失败" + "！");
+					}
+				}
+			});
+		});
+		
+		//用户允许登录
+		$("#parents").on('click', '#test4', function() {
+			console.log($(this).attr('login'));
+			$.ajax({
+				"url" : "/updatelogin",
+				"data" : {
+					"username" : JSON.stringify($(this).attr('login'))
+				},
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.status == 200) {
+						alert("修改成功" + "！");
+					}
+					if (json.status == 600) {
+						alert("修改失败" + "！");
+					}
+				}
+			});
+		});
+		//用户不允许登录
+		$("#parents").on('click', '#test3', function() {
+			console.log($(this).attr('notlogin'));
+			$.ajax({
+				"url" : "/updatestatus",
+				"data" : {
+					"username" : JSON.stringify($(this).attr('notlogin'))
+				},
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.status == 200) {
+						alert("修改成功" + "！");
+					}
+					if (json.status == 600) {
+						alert("修改失败" + "！");
+					}
+				}
+
+			});
+		});
+		
+		// 修改标签
+		$("#onc-hot").on('click', function() {
+			$.ajax({
+				"url" : "/hot",
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+				
+				}
+			});
+		});
+		
+		// 修改标签
+		$("#updatetag").on('click', function() {
+			$.ajax({
+				"url" : "/adminindex",
+				"data" : $("#layui-form").serialize(),
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.status == 200) {
+						alert("修改成功" + "！");
+					}
+					if (json.status == 600) {
+						alert("修改失败" + "！");
+					}
+				}
+			});
+		});
+
+		// 用户管理 
+		$("#updateUser").on('click', function() {
+			alert("点击" + "！");
+			$.ajax({
+				"url" : "/updateUser",
+				"data" : $("#layui-form").serialize(),
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.status == 200) {
+						alert("修改成功" + "！");
+					}
+					if (json.status == 600) {
+						alert("修改失败" + "！");
+					}
+				}
+			});
+		});
+		/* 删除标签 */
+		$("#tagparent").on('click', '#delet', function() {
+			console.log($(this).attr('deletetag'));//标签名字
+			$.ajax({
+				"url" : "/deletetag",
+				"data" : {
+					"tagName" : JSON.stringify($(this).attr('deletetag'))
+				},
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+
+				}
+			});
+		});
+
+		/* 删除文章 */
+		$("#parent").on('click', '#delete', function() {
+			console.log($(this).attr('deletearticle'));//文章id
+			$.ajax({
+				"url" : "/delete",
+				"data" : {
+					"artid" : JSON.stringify($(this).attr('deletearticle'))
+				},
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+
+					if (json.status == 200) {
+						alert("修改成功" + "！");
+
+					}
+					if (json.status == 600) {
+						alert("修改失败" + "！");
+					}
+				}
+			});
+		});
+
+
+		//被举报的用户不允许登录
+		$("#parent").on('click', '#notallow', function() {
+			console.log($(this).attr('notlogin'));
+			$.ajax({
+				"url" : "/updatestatus",
+				"data" : {
+					"username" : JSON.stringify($(this).attr('notlogin'))
+				},
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.status == 200) {
+						alert("修改成功" + "！");
+					}
+					if (json.status == 600) {
+						alert("修改失败" + "！");
+					}
+				}
+
+			});
+		});
+
+		//被举报的用户允许登录
+		$("#parent").on('click', '#allow', function() {
+			console.log($(this).attr('login'));
+			$.ajax({
+				"url" : "/updatelogin",
+				"data" : {
+					"username" : JSON.stringify($(this).attr('login'))
+				},
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.status == 200) {
+						alert("修改成功" + "！");
+					}
+					if (json.status == 600) {
+						alert("修改失败" + "！");
+					}
+				}
+			});
+		});
+		</script>
+	<script src="layui/jquery-v3.2.1.js" charset="utf-8"></script>
+	<script src="layer/layer.js"></script>
+	<script src="https://www.layuicdn.com/layui-v2.5.4/layui.js" charset="utf-8"></script>
+	<script>
+	
+	/* //查看热门文章详情
+	$('#lookarthot').on('click', '#lokh', function() {
+		console.log($(this).attr('hottitle'));
+		$.ajax({
+			"url" : "/lookArticleHot",
+			"data" : {
+				"title" : JSON.stringify($(this).attr('hottitle'))
+			},
+			"type" : "POST",
+			"dataType" : "json",
+			"success" : function(json) {
+				console.log(json);
+				var datas = json.data
+				var pcc = datas.pcContent
+				console.log(pcc); 
+				layer.open({
+					type : 1,
+					area : [ '600px', '360px' ],
+					shadeClose : true, //点击遮罩关闭
+					content : pcc
+				});
+			}
+		});
+	}); */
+	
+	
+	//查看热门文章详情
+	$('#lookarthot').on('click', '#lokh', function() {
+		console.log($(this).attr('hottitle'));
+		$.ajax({
+			"url" : "/lookArticleHot",
+			"data" : {
+				"title" : JSON.stringify($(this).attr('hottitle'))
+			},
+			"type" : "POST",
+			"dataType" : "json",
+			"success" : function(json) {
+				console.log(json);
+				var datas = json.data
+				var pcc = datas.pcContent
+				console.log(pcc); 
+				layer.open({
+					type : 1,
+					area : [ '600px', '360px' ],
+					shadeClose : true, //点击遮罩关闭
+					content : pcc
+				});
+			}
+		});
+	});
+	
+
+		//修改标签
+		$('#upd')
+				.on(
+						'click',
+						'#upde',
+						function() {
+							layer
+									.open({
+										type : 1,
+										area : [ '600px', '360px' ],
+										shadeClose : true, //点击遮罩关闭
+										content : '\<\div style="padding:20px;">\<\/div>'
+												+ '<form style="margin-left:150px;" class="layui-form" action="adminindex">'
+												+ '\<\div class="layui-form-item">'
+												+ '\<\label class="layui-form-label">标签名</label>'
+												+ '\<\div class="layui-input-inline">'
+												+ '\<\input type="tagName" name="tagName" required lay-verify="required" placeholder="请输入标签名" autocomplete="off" class="layui-input">'
+												+ '\<\/div>'
+												+ '\<\/div>'
+												+ '\<\div class="layui-form-item">'
+												+ '\<\label class="layui-form-label">标签id</label>'
+												+ '\<\div class="layui-input-inline">'
+												+ '\<\input type="tagId" name="tagId" required lay-verify="required" placeholder="请输入标签id" autocomplete="off" class="layui-input">'
+												+ '\<\/div>'
+												+ '\<\/div>'
+												+ ' <button style="margin-left:100px;" id="updatetag" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>'
+												+ '</form>'
+									});
+						});
+
+		//查看文章详情
+		$('#detail').on('click', '#details', function() {
+			console.log($(this).attr('lookarticle'));
+			$.ajax({
+				"url" : "/lookArticle",
+				"data" : {
+					"artid" : JSON.stringify($(this).attr('lookarticle'))
+				},
+				"type" : "POST",
+				"dataType" : "json",
+				"success" : function(json) {
+					console.log(json);
+					var datas = json.data
+					var pcc = datas.pcContent
+					console.log(pcc);
+					layer.open({
+						type : 1,
+						area : [ '600px', '360px' ],
+						shadeClose : true, //点击遮罩关闭
+						content : pcc
+					});
+				}
+			});
+		});
+		//修改用户资料
+		$('#test')
+				.on(
+						'click',
+						'#test2',
+						function() {
+							layer
+									.open({
+										type : 1,
+										area : [ '600px', '360px' ],
+										shadeClose : true, //点击遮罩关闭
+										content : '\<\div style="padding:20px;">\<\/div>'
+												+ '<form  style="margin-left:150px;" class="layui-form" action="adminindex">'
+												+ '\<\div  class="layui-form-item">'
+												+ '\<\label class="layui-form-label">用户名</label>'
+												+ '\<\div class="layui-input-inline">'
+												+ '\<\input type="username" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">'
+												+ '\<\/div>'
+												+ '\<\/div>'
+												+ '\<\div class="layui-form-item">'
+												+ '\<\label class="layui-form-label">邮箱</label>'
+												+ '\<\div class="layui-input-inline">'
+												+ '\<\input type="eMail" name="eMail" required lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">'
+												+ '\<\/div>'
+												+ '\<\/div>'
+												+ '\<\div class="layui-form-item">'
+												+ '\<\label class="layui-form-label">性别\<\/label>'
+												+ '\<\div class="layui-input-inline">'
+												+ '\<\input type="gender" name="gender" required lay-verify="required" placeholder="请输入性别" autocomplete="off" class="layui-input">'
+												+ '\<\/div>'
+												+ '\<\/div>'
+												+ '\<\div class="layui-form-item">'
+												+ '\<\label class="layui-form-label">工作\<\/label>'
+												+ '\<\div class="layui-input-inline">'
+												+ '\<\input type="job" name="job" required lay-verify="required" placeholder="请输入工作" autocomplete="off" class="layui-input">'
+												+ '\<\/div>'
+												+ '\<\/div>'
+												+ ' <button style="margin-left:100px;"  id="updateUser" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>'
+												+ '</form>'
+									});
+						});
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+
+<style type="text/css">
+.main {
+	display: block;
+	position: fixed;
+	min-width: 1200px;
+	/* overflow: hidden; */
+	z-index: 999999999;
+	width: 100%;
+	height: 45px;
+	text-align: center;
+	background-color: rgb(255, 255, 255);
+	color: #000000;
+}
+.layui-nav .layui-nav-item {
+line-height: 44px !important;
+}
+.search01 {
+	border-radius: 8px;
+}
+
+.search02 {
+	float: right;
+	margin-right: 130px;
+	margin-top: 15px;
+}
+
+.location00 {
+	float: left;
+	margin-left: 150px;
+}
+
+.location01 {
+	float: left;
+	margin-left: 50px;
+}
+
+.location03 {
+	float: right;
+	margin-right: 120px;
+}
+
+.location02 {
+	float: right;
+	margin-right: 20px;
+}
+
+.main .userinfo-header {
+	position: absolute;
+	top: 0px;
+	right: 60px;
+}
+.icon-fangdajing:hover{
+cursor:pointer;
+}
+</style>
+<body>
+<!-- layui-this 选中 -->
+	<ul class="layui-nav main" lay-filter="">
+		<li class="layui-nav-item location00"><a
+			style="font-size: 30px; color: #000" href="">掘CSDN</a></li>
+		<li class="layui-nav-item  location01"><a
+			style="color: #000" href="/">首页</a></li>
+		<li class="layui-nav-item location01" id="follow_man" href="###">关注人</li>
+		<span class="layui-breadcrumb search02" lay-separator=""> <span
+			th:if="${user?.username==null}"> <a href="/user/login">登录</a> <a href="/user/regist">注册</a>
+		</span>
+		</span>
+			<li class="layui-nav-item location03" id="write_article"><a
+				href="javascript:void(0);"  style="color: rgb(202, 12, 22);margin-top: 2px;"><text class="iconfont icon-xiexin" style="    font-size: 18px;
+    margin-right: 5px;"></text>写博客</a></li>
+			<li class="layui-nav-item location02"><input id="search_input"
+				style="font-size: 14px; width: 216px; padding-left: 12px; border: 0; height: 32px; border-radius: 5px; background: 0 0; background-color: rgb(245, 246, 247);"
+				class="search01" type="text" required lay-verify="required"
+				placeholder="请输入标题"></input> <a id="search_article"
+				style="display: inline; background-color: rgb(245, 246, 247); padding: 8px 9px 8px 5px; border-radius: 5px; margin: 0px 0px 0px -23px;">
+					<text style="  font-size: 18px; color: #ccc; "class="iconfont icon-fangdajing"></text>
+			</a></li>
+		<li class="layui-nav-item userinfo-header" th:if="${user?.username}">
+			<a href="/user/userinfo"
+			><img th:src="${user == null ? 
+                      '/images/login.jpg' :
+                       user.icon}" class="layui-nav-img user-icon"><span
+				style="color: black"><span  th:text="${user?.username}">用户名</span></span></a>
+			<dl class="layui-nav-child head-hover" style="top:46px">
+				<dd>
+					<a href="/user/userinfo" 
+					>个人主页</a>
+				</dd>
+				<dd>
+					<a href="/user/logout">退了</a>
+				</dd>
+			</dl>
+		</li>
+	</ul>
+	
+ <script type="text/javascript">
+	/* 注意：导航 依赖 element 模块，否则无法进行功能性操作 */
+	layui.use('element', function(){
+	  var element = layui.element;
+	  
+	  //…
+	});
+</script>
+</script> 
+
+</body>

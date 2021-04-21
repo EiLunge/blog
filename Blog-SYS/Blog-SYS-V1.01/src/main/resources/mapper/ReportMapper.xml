@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace对应哪个接口 -->
+<mapper namespace="com.sx.blog.admin.mapper.ReportMapper">
+
+	<resultMap type="com.sx.blog.admin.enetity.ReportUser" id="UserEntityMap">
+		<id column="report_id" property="reportId"/>
+		<result column="user_id" property="userId"/>
+		<result column="article_id" property="articleId"/>
+		<result column="msg" property="msg"/>
+	</resultMap>
+		
+	<!-- 查询全部被举报的用户信息 -->
+	<select id="selectByReportId" resultMap="UserEntityMap" >
+		select * from public.report 
+	</select>
+	
+	
+	<!-- 三表联查 -->
+	<select id="selectByUserId" resultMap="UserEntityMap" >
+		select
+				u.username,r.msg,a.title,r.article_id
+		from
+				 public.user u,public.report r, public.article a
+	 	where 
+	 				a.article_id=r.article_id and a.user_id=u.user_id
+	</select>
+	
+	
+	
+	
+	
+</mapper>
+

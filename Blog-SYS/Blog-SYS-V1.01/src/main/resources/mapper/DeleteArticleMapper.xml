@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace对应哪个接口 -->
+<mapper namespace="com.sx.blog.admin.mapper.DeleteArticleMapper">
+
+	
+		
+	<!-- 根据文章di删除文章 -->
+	<delete id="deleteArticleById">	
+		delete	from
+						 public.article
+	 where 
+						article_id=#{articleId}
+	</delete>
+	
+	<!-- 根据文章di删除举报表中数据 -->
+	<delete id="deleteReport">	
+		delete	from
+						 public.report
+	 where 
+						article_id=#{articleId}
+	</delete>
+	
+	
+	
+	
+</mapper>
+

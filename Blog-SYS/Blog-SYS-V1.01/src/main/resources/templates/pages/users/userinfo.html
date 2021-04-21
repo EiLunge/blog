@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${user?.username}+的个人信息页面">userinfo</title>
+<link rel="stylesheet" href="/layui/css/layui.css">
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_1603667_yc1yujbhqi.css">
+<link rel="stylesheet" href="/newcss/article-list.css">
+<link rel="stylesheet" href="/mine/css/mine01.css">
+
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="/layui/jquery-v3.2.1.js"></script>
+<link rel="icon" href="/static/ico/favicon.ico">
+<style type="text/css">
+html {
+	font-size: 10px;
+}
+
+body {
+	margin: 0px;
+	background-color: rgb(244, 245, 245);
+	font-size: 16px;
+	overflow-y: scroll;
+	 background:url(/images/dota2bz.jpg)no-repeat;
+            background-size: 100% 100%;
+}
+
+.page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.container {
+	max-width: 30rem;
+	/*最大宽度 */
+	margin: 0 auto;
+	/*设置内部块元素居中*/
+	background-color: aquamarine;
+}
+
+.blog-header {
+	height: 44px;
+	width: 100%;
+	background-color: white;
+}
+
+.user-info {
+	margin: 18px 0px 1.5rem 0px;
+	display: flex;
+	width: 64rem;
+	padding: 3rem;
+	background-color: rgb(255, 255, 255);
+}
+
+.user-info .avatar {
+	display: block;
+	margin-right: 2.88rem;
+	width: 9rem;
+	height: 9rem;
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+.user-info .avatar img {
+	width: 9rem;
+	height: 9rem;
+}
+
+.user-info .info-box {
+	flex: 1;
+	margin-right: 2.4rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.user-info .info-box .top {
+	display: flex;
+	align-items: center;
+}
+
+.user-info .info-box .top .username {
+	margin: 0;
+}
+
+.user-info .info-box .intro .info-input, .user-info .info-box .position .info-input
+	{
+	color: #4a68ad;
+	cursor: pointer;
+}
+
+.user-info .info-box .position, .user-info .info-box .intro {
+	display: flex;
+	font-size: 1.5rem;
+	line-height: 1.5;
+	color: #72777b;
+	overflow: hidden;
+}
+
+.user-info .action-box {
+	display: flex;
+	align-items: flex-end;
+}
+
+.user-info .action-box button:hover {
+	cursor: pointer;
+}
+
+.user-info .action-box .btn {
+	height: 3.4rem;
+	font-size: 1.6rem;
+	font-weight: 500;
+	line-height: 1.2;
+	border: 1px solid;
+	background-color: #fff;
+	border-radius: 4px;
+}
+
+.user-info .action-box .setting-btn {
+	color: #3780f7;
+}
+
+/* 列表css */
+.list-header {
+	background-color: rgb(255, 255, 255);
+	display: flex;
+	align-items: center;
+	margin: 0 auto;
+	height: 50px;
+	max-width: 70rem;
+	white-space: nowrap;
+}
+
+.list-header .nav-item {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	cursor: pointer;
+	width: 11.6666666rem;
+	border-bottom: 1px solid rgb(218, 219, 219);
+	height: 5rem;
+}
+
+.list-header a {
+	text-decoration: none;
+	cursor: pointer;
+	color: #000000;
+}
+
+.list-header .nav-item.active {
+	box-shadow: inset 0 -2px 0 #3780f7;
+}
+
+.list-body {
+	width: 70rem;
+	background-color: rgb(255, 255, 255);
+}
+
+.list-body .sub-header {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	padding: 0 2.4rem;
+	height: 5rem;
+	white-space: nowrap;
+/* 	border-left: 1px solid rgb(221, 221, 221);
+	border-right: 1px solid rgb(221, 221, 221); */
+	border-bottom: 0.1rem solid rgb(218, 219, 219);
+}
+
+.list-body .sub-header .sub-header-title {
+	margin-right: 1.2rem;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #000;
+}
+
+.min-height {
+	background-color: rgb(255, 255, 255);
+	min-height: 415px;
+	border-left: 1px solid rgb(221, 221, 221);
+	border-right: 1px solid rgb(221, 221, 221);
+	/*         background:url(/images/66666.jpg); */
+	background-size: cover;
+}
+
+/* .clearfix:after{
+            content: "";
+            display:block;
+            clear: both;
+        }
+        .clearfix{
+            zoom: 1;
+        } */
+</style>
+</head>
+
+<body>
+	<!-- 当前用户id -->
+	<input type="hidden" name="userId" th:value="${user?.userId}"
+		id="userId" />
+	<div class="page">
+		<div class="blog-header">
+			<div class="header" th:replace="/users/header"></div>
+		</div>
+		<div class="user-info">
+			<div class="avatar">
+			 <a th:href="'/user/other/'+${user?.username}"  target="_blank">
+				<img
+					th:src="${user == null ? 
+                      '/images/login.jpg' :
+                       user.icon}"
+					src="/images/login.jpg"class="user-icon"></a>
+			</div>
+			<div class="info-box">
+				<div class="top">
+					<h1 class="username">
+						<span th:text="${user?.username}">用户名</span>
+					</h1>
+				</div>
+				<div class="position">
+					<div title="填写职位信息" class="info-input">
+						<span th:text="${user?.job}">职业</span>
+					</div>
+				</div>
+				<div class="intro">
+					<div title="填写个人介绍" class="info-input">
+						<span th:text="${user?.introduce}">简介</span>
+					</div>
+				</div>
+			</div>
+			<div class="action-box">
+				<button class="setting-btn btn" onclick="editUserInfo()" style="  width: 181px;">编辑个人资料</button>
+			</div>
+		</div>
+		<div class="list-header">
+			<a href="javascript:void(0);" class="nav-item active" id="dt">
+				<div class="item-title">
+					动态(<span th:text="${userVo?.userDetail?.articleNum}" id="userinfo-dynamicNum">1</span>)
+				</div>
+			</a>
+			<a href="javascript:void(0);" class="nav-item" id="sc">
+				<div class="item-title">
+					收藏(<span th:text="${userVo?.userDetail?.collectNum}" id="userinfo-collectNum">1</span>)
+				</div> <!-- <div class="item-count">1</div> -->
+			</a>
+			<a href="javascript:void(0);" class="nav-item" id="dz">
+				<div class="item-title">
+					点赞(<span th:text="${userVo?.userDetail?.likesNum}" id="userinfo-likesNum">1</span>)
+				</div>
+			</a>
+			<a href="javascript:void(0);" class="nav-item" id="cg">
+				<div class="item-title">
+					草稿(<span th:text="${userVo?.userDetail?.articleDraftNum}" id="userinfo-draftNum">1</span>)
+				</div>
+			</a>
+			<a href="javascript:void(0);" class="nav-item" id="gz">
+				<div class="item-title">
+					关注(<span th:text="${userVo?.userDetail?.followNum}" id="userinfo-followNum">1</span>)
+				</div>
+			</a>
+			<a href="javascript:void(0);" class="nav-item" id="fs">
+				<div class="item-title">
+					粉丝<span th:text="${'('+userVo?.userDetail?.fansNum+')'}">1</span>
+				</div>
+			</a>
+		</div>
+		<div class="min-height">
+			<div id="list-body" class="list-body"></div>
+		</div>
+<!-- 		<div class="list-tail" th:replace="/users/tail"></div>
+		 <input  id="pickListModels" th:value='${test}'> -->
+	</div>
+	</div>
+
+</body>
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript">
+	//开局引入
+	$(document).ready(function() {
+		$('#list-body').load('/user/list-body-dt');
+	});
+	$("#dt").click(function() {
+		$('#list-body').load('/user/list-body-dt');
+	});
+	$("#sc").click(function() {
+		$('#list-body').load('/user/list-body-sc');
+	});
+	$("#dz").click(function() {
+		$('#list-body').load('/user/list-body-dz');
+	});
+	$("#cg").click(function() {
+		$('#list-body').load('/user/list-body-cg');
+	});
+	$("#gz").click(function() {
+		$('#list-body').load('/user/list-body-gz');
+	});
+	$("#fs").click(function() {
+		$('#list-body').load('/user/list-body-fs');
+	});
+	
+	$(".list-header a").click(function() {
+		$(".list-header a").removeClass("active");
+		$(this).addClass("active");
+	})
+	function editUserInfo() {
+		window.location.href = 'edit'
+	}
+	
+	//搜索框查询
+	$("#search_article").click(function() {
+		window.location.href = '//localhost/search?q='+$("#search_input").val();
+		$("#all_article").load("searchList", {
+			"title" : $("#search_input").val()
+		});
+	});
+
+	//写文章
+	$("#write_article").click(function() {
+		window.location.href = '/article/edit';
+	})
+</script>
+
+</html>

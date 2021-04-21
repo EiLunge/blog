@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace对应哪个接口 -->
+<mapper namespace="com.sx.blog.admin.mapper.AdminMapper">
+
+		
+	<!-- 根据管理员名字查询密码 -->
+	<select id="selectAdminUser" resultType="com.sx.blog.admin.enetity.AdminUser">
+		select
+					 * 
+		from 
+					public.admin_user
+		where 
+					username=#{userName}
+	</select>
+	
+	
+</mapper>
+

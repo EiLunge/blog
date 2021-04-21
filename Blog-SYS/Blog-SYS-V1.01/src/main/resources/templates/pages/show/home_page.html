@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>博客首页</title>
+<link rel="stylesheet" href="/layui/css/layui.css">
+<link rel="stylesheet"
+	href="https://at.alicdn.com/t/font_1603667_yc1yujbhqi.css">
+<link rel="stylesheet" href="/mine/css/mine01.css">
+<link rel="icon" href="/static/ico/favicon.ico">
+<script src="/layui/layui.js"></script>
+<script type="text/javascript" src="/layui/jquery-v3.2.1.js"></script>
+<style>
+.next_article:hover{
+cursor:pointer;
+}
+.right_con_active{
+ position:fixed;bottom:0;
+}
+.tag_left.right_con_active{
+    position: fixed;
+    bottom: 0px;
+    padding-left:119px;
+}
+</style>
+</head>
+<body>
+	<!-- 导航栏头部 -->
+	<header>
+		<div class="headbg">
+			<div class="header" th:replace="/users/header"></div>
+		</div>
+	</header>
+	<!-- 文章和左右内容身体部分 -->
+<body class="tbody">
+<input id="currentTagId" type="hidden"></input>
+<input id="articleIfNull"type="hidden"></input>
+	<div class="total">
+		<div class="q">
+			<div class="first layui-col-md2" style="height: 880px;">
+				<!-- 左侧标签 -->
+				<div class="tag_left" th:replace="/show/tag_left"></div>
+			</div>
+		</div>
+
+		<div class="second layui-col-md7">
+			<!-- 中部文章 -->
+			<div id="all_article">
+				<div class="article_middle" th:replace="/show/article-list"></div>
+			</div>
+			<div id="control_enter" style="text-align: center; color: #ca0c16; font-size: 14px;">
+				<span id="next_article" class="next_article">点击加载更多</span>
+			</div>
+		</div>
+
+		<div class="third layui-col-md3">
+			<!-- 右边排行+底部 -->
+			<div class="recommend_right" th:replace="/show/recommend_right"></div>
+		</div>
+	</div>
+</body>
+
+</body>
+
+<script type="text/javascript">
+
+var tagId;
+var title;
+var index=1;
+//左右监听下拉事件
+window.addEventListener('scroll', function(){
+	let hl=$('.tag_left').outerHeight();
+	let hr = $('.recommend_right').outerHeight();
+ 	let t = $('body, html').scrollTop();   // 目前监听的是整个body的滚动条距离
+ 	if(t>t>(hr-500)||t>(hl-500)){
+ 		if(t>(hr-500))
+		$('.recommend_right').addClass('right_con_active')
+		if(t>(hl-500))
+		$('.tag_left').addClass('right_con_active')
+	}else{
+		$('.recommend_right').removeClass('right_con_active')
+		$('.tag_left').removeClass('right_con_active')
+	}
+ }) 
+ 	//搜索框回车查询
+    $('#search_input').bind('keyup', function(event) {
+        if (event.keyCode == "13") {
+            //回车执行查询
+            $('#search_article').click();
+        }
+    });
+	//搜索框查询
+	$("#search_article").click(function() {
+		$("#articleIfNull").val(0);
+		index=0;
+		title=$("#search_input").val()
+		$("#all_article").load("search-article", {
+			"title" : title,"tagId":tagId,"index":index
+		});
+		index++;
+	});
+
+	//点击加载跟多
+	$("#next_article").click(function() {
+						//当文章不为空
+						if($("#articleIfNull").val()!=1){
+							let html='<div id="yyy"></div>';
+							let moreArticles='moreArticles'+index;
+							html=html.replace(/yyy/g,moreArticles);
+							$("#all_article").append(html);
+							$("#moreArticles"+index).load("search-article", {"index" : index,"tagId":tagId,"title":title});
+							index++;
+						}
+					});
+
+	//关注人博文
+	$("#follow_man").click(function() {
+		$("#all_article").load("followList");
+	})
+	
+	//左侧推荐查询
+	$(".recommend").click(function() {
+		//推荐文章功能待完善
+		$(".tag_list").removeClass("active");
+		$(this).addClass("active");
+		$("#all_article").load('//localhost/recomendarticle');
+	})
+	/* 左侧标签查询 */
+	$("#tag_search .tag_list").click(function() {
+		$("#articleIfNull").val(0)
+		index=0;
+		$(".recommend").removeClass("active");
+		$(".tag_list").removeClass("active");
+		$(this).addClass("active");
+		$("#currentTagId").attr("value",$(this).attr('tagId'));
+		tagId=$(this).attr('tagId');
+		$("#all_article").load("//localhost/search-article", {
+			"index" : index,"tagId":tagId,"title":null
+		});
+		index++;
+	})
+	//写文章
+	$("#write_article").click(function() {
+		window.location.href = '/article/edit';
+	})
+</script>
+</html>
+

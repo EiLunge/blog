@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>右侧推荐栏</title>
+		<!-- <link rel="stylesheet" href="/layui/css/layui.css">
+		<script src="/layui/layui.js"></script>
+		<script src="/layui/jquery-v3.2.1.js"></script>
+		<script src="/layui/lay/modules/layui.js"></script> -->
+		
+	</head>
+	<style type="text/css">
+	.main_recommend{
+		width:200px;
+	}
+	.layui-table{
+		margin-top:0px;
+		margin-bottom:10px;
+		margin-left:10px;
+	}
+	.layui-table th{
+		background-color:#fff;
+	}
+	.text_hide {		
+		 overflow:hidden;
+		 width:150px;
+		 text-overflow:ellipsis;
+		 white-space:nowrap;	
+	}
+	
+
+	</style>
+	<body>
+		<div class="recommend_rigth" th:fragment="recommend_right">
+		<div class="main_recommend">
+			<!-- 今日推荐 -->
+			<table class="layui-table">
+				<thead>
+				  <tr>     
+				    <th><span style="color:#cf2730;font-size:20px">|</span> 今日推荐</th>
+				  </tr> 
+				</thead>
+				<tbody>
+				  <tr>			     
+				    <td> 
+				    	<div style="width:100%">
+				    		<div class="layui-row">
+							    <div class="layui-col-md2">
+							    	<li class="layui-icon layui-icon-fire" style="font-size: 24px; color: #ff2400;"></li>
+							    </div>
+							    <div class="layui-col-md10">
+							    	<div class='text_hide'>人生就像是一场修行，修行不到家只能还俗了！</div>
+							    </div>
+							  </div>
+				    	</div>
+				    </td>
+				  </tr>
+				</tbody>
+			</table>
+			<!-- 热门排行 -->
+			<table class="layui-table main_recommend">
+				<thead>
+				  <tr>     
+				    <th><span style="color:#cf2730;font-size:20px">|</span> 热门排行</th>
+				  </tr> 
+				</thead>
+				<tbody th:each="hot : ${hotArticles}"> <!--  -->
+				  <tr>			     
+				    <td>
+				    	<div class='text_hide'>
+				    		<a th:text="${hot.title}"  th:href="@{'/user/article/detail/'+${hot.articleId}}">人生就像是一场修行，修行不到家只能还俗了！</a>
+				    	</div>
+				    </td>
+				  </tr>
+				</tbody>
+			</table>
+			<!-- 游览排行 -->
+			<table class="layui-table main_recommend">
+				<thead>
+				  <tr>     
+				    <th><span style="color:#cf2730;font-size:20px">|</span> 游览排行</th>
+				  </tr> 
+				</thead>
+				<tbody th:each="browse : ${browseArticles}">
+				  <tr>			     
+				   <td>
+					  <div  class='text_hide'>
+					   	<a th:text="${browse.title}" th:href="@{'/user/article/detail/'+${browse.articleId}}">人生就像是一场修行，修行不到家只能还俗了！</a>
+					  </div>
+				   </td>
+				  </tr>
+				</tbody>
+			</table>
+		</div>	
+		</div> 		
+	</body>
+	
+</html>

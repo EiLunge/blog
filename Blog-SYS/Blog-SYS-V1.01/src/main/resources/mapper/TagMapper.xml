@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace对应哪个接口 -->
+<mapper namespace="com.sx.blog.admin.mapper.TagMapper">
+
+	<resultMap type="com.sx.blog.admin.enetity.Tag" id="UserEntityMap">
+	
+		<result column="tag_name" property="tagName"/>
+		<result column="tag_id" property="tagId"/>
+		
+	</resultMap>
+		
+	<!-- 分页查询标签信息 List<Tag> selectAllTag(@Param("count")Integer count ,@Param("start") Integer start); -->
+	<select id="selectAllTag" resultType="com.sx.blog.admin.enetity.Tag">
+		select 
+						tag_name,tag_id 
+		from    
+						public.tag 
+		order by 
+						tag_id
+		limit
+		 				#{count} offset #{start} 
+	</select>
+	
+	<select id="selectTagName" resultMap="UserEntityMap">
+		 SELECT COUNT (*)  from public.tag
+	</select>
+	
+	<update id="updateTagNameById">
+		update 
+						public.tag
+		set 
+						tag_name=#{tagName}
+		where 	
+						tag_id=#{tagId}
+	</update>
+	
+	<delete id="deleteTagNameById">
+		delete  
+		from 		public.tag
+		where 	tag_name=#{tagName}
+	</delete>
+	
+	
+	
+</mapper>
+

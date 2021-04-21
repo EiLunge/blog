@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>粉丝</title>
+    <style>
+        .follower-list {
+            display: flex;
+            flex-wrap: wrap;
+			border-left:1px solid rgb(221, 221, 221);
+			border-right:1px solid rgb(221, 221, 221);
+        }
+
+        .follower-list .follower-item {
+            width: 60px;
+            display: flex;
+            flex-direction: column;
+            margin: 5px 3px 5px 14px;
+        }
+
+        .follower-list .follower-item .follower-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+        }
+/* .follower-list .follower-item a:hover{
+ color:rgb(155, 255, 217); 
+} */
+        .follower-list .follower-item .follower-name {
+            width: 60px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="list-body">
+        <div class="sub-header">
+            <div class="sub-header-title">粉丝</div>
+        </div>
+        <div class="sub-item">
+            <!-- 粉丝列表 -->
+            <div class="follower-list" >
+                <div class="follower-item" th:each="fan :${fans}">
+                    <a th:href="'/user/other/'+${fan.username}"  target="_blank">
+                        <image class="follower-icon" th:src="${fan?.icon}" src="/images/bajie-1.jpg" />
+                        <div class="follower-name"><span th:text="${fan.username}">高富帅</span></div>
+                    </a>
+                </div> 
+                <div class="follower-item" th:remove="all" >
+                    <a href="######" target="_blank">
+                        <image class="follower-icon" src="/images/bajie-1.jpg" />
+                        <div class="follower-name">高富帅</div>
+                    </a>
+                </div>
+              <div class="follower-item" th:remove="all" >
+                    <a href="######" target="_blank">
+                        <image class="follower-icon" src="/images/bajie-1.jpg" />
+                        <div class="follower-name">高富帅</div>
+                    </a>
+                </div> 
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+/* 粉丝名hover随机颜色 */
+function Color(){
+	var r = Math.floor(Math.random()*255);
+	var g = Math.floor(Math.random()*255);
+	var b = Math.floor(Math.random()*255);
+    var color = 'rgb('+ r +','+ g +','+ b +')';
+    return color;
+  }
+ $(document).ready(function(){
+	  $(".follower-item a").hover(function(){
+	    $(this).css("color",Color());
+	    },function(){
+	    $(this).css("color",Color());
+	  });
+	});
+</script>
+
+</html>

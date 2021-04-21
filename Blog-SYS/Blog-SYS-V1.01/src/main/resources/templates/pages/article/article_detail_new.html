@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title th:text="${article?.title}">文章详情页</title>
+<link rel="stylesheet" href="/layui/css/layui.css">
+<link rel="stylesheet"
+	href="https://at.alicdn.com/t/font_1603667_yc1yujbhqi.css">
+<script src="/layui/layui.js"></script>
+<link rel="icon" href="/static/ico/favicon.ico">
+</head>
+<style type="text/css">
+html {
+	font-size: 10px;
+}
+
+body {
+	margin: 0px;
+	background-color: rgb(244, 245, 245);
+	font-size: 16px;
+}
+
+.headbg {
+	width: 100%;
+	height: 10px;
+	margin-bottom: 51px;
+}
+
+.left {
+	overflow: hidden;
+}
+
+.userinfo-left {
+	float: right;
+	margin-top: 0px;
+	margin-right: 20px;
+}
+.right_con_active{
+ position:fixed;bottom:0;
+}
+</style>
+<body>
+	<!-- 注意 以下均为相关表id，不单单为0/1 -->
+	<!-- 当前用户id -->
+	<input type="hidden" name="userId" th:value="${user?.userId}"
+		id="userId" />
+	<!-- 当前文章id -->
+	<input type="hidden" name="articleId" th:value="${article?.articleId}"
+		id="articleId" />
+	<!-- 是否 已关注当前用户 -->
+	<input type="hidden" name="isFollow" th:value="${followId}"
+		id="isFollow" />
+	<!-- 是否 已点赞当前文章 -->
+	<input type="hidden" name="isLike" th:value="${likeId}" id="isLike" />
+	<!-- 是否 已收藏当前文章 -->
+	<input type="hidden" name="isCollectId" th:value="${collectId}"
+		id="isCollectId" />
+	<!-- 博主id -->
+    <input type="hidden" name="otherId" th:value="${other?.user?.userId}"
+      id="otherId" />
+    <!-- 用户名 -->
+    <input type="hidden" name="username" th:value="${user==null?'':user.username}" id="username" />
+    <!-- 用户头像 -->
+    <input type="hidden" name="icon" th:value="${user==null?'':user.icon}" id="icon" />
+    <!-- 用户已赞评论列表 -->
+	<input type="hidden" id="likeCommentIdList" th:value="${likeCommentIdList}"></body>
+	<!-- 导航栏头部 -->
+	<header>
+		<div class="headbg">
+			<div class="header" th:replace="/users/header"></div>
+		</div>
+	</header>
+	<!-- 文章和左右内容身体部分 -->
+<body class="tbody">
+	<div class="total">
+		<div class="q">
+			<div class="left layui-col-md2">
+				<!-- 左侧标签 -->
+				<div class="userinfo-left" th:replace="/article/userinfo_left"></div>
+			</div>
+		</div>
+		<div class="middle layui-col-md7">
+			<!-- 中部文章 -->
+			<div class="article-middle" th:replace="/article/article_content"></div>
+		</div>
+
+		<div class="right layui-col-md3">
+			<!-- 右边排行 -->
+			<div class="recommend-right" th:replace="/show/recommend_right"></div>
+		</div>
+	</div>
+</body>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".user-icon").each(function() {
+	var iconSrc=$(this).attr('src');
+	if(iconSrc.indexOf("?") == -1){
+		$(this).attr("src",iconSrc+"?timeStamp=("+new Date()+')');
+		}
+	});
+});
+//左右监听下拉事件
+window.addEventListener('scroll', function(){
+	let hr = $('.recommend_right').outerHeight();
+ 	let t = $('body, html').scrollTop();   // 目前监听的是整个body的滚动条距离
+ 		if(t>(hr-500)){
+		$('.recommend_right').addClass('right_con_active')
+	}else{
+		$('.recommend_right').removeClass('right_con_active')
+	}
+ }) 
+ 	//搜索框查询
+	$("#search_article").click(function() {
+		window.location.href = '//localhost/search?q='+$("#search_input").val();
+		$("#all_article").load("searchList", {
+			"title" : $("#search_input").val()
+		});
+	});
+
+	//写文章
+	$("#write_article").click(function() {
+		window.location.href = '/article/edit';
+	})
+ </script>
+</html>
